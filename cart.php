@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				}
 					
 				$TotalPayment = 0;
-				if(!empty($_SESSION["cart1"][1])){
+				if(!empty($_SESSION["cart1"])){
 				foreach($_SESSION['cart1'] as $cart => $val) {
 					
 					$ProdID = $val;
