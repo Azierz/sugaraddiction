@@ -1,0 +1,477 @@
+* {
+	/* border:0; */
+	margin:0;
+	padding:0;
+}
+
+/* general */
+a {
+	color:#000000;
+	text-decoration:none;
+}
+
+a:hover {
+	color:#333;
+	text-decoration:none;
+}
+
+/* body */
+body {
+	background:#FDFDC8;
+	color:#555;
+	font:0.8em Arial, Helvetica, "bitstream vera sans", sans-serif;
+}
+
+/* HEADER START */
+#header {
+	border-bottom:1px solid #999;
+	height:80px;
+	margin:0 auto;
+	width:70vw;
+	background:#FDFDAD;
+	position: relative;
+
+	border-top: 3px groove;
+	border-left: 3px groove;
+	border-right: 3px groove;
+}
+#header h1 {
+	color:#000000;
+	font-size:300%;
+	letter-spacing:-3px;
+	text-align:right;
+	padding:5px;
+	margin-bottom:-20px;
+	position: absolute;
+	top: 8px;
+	right: 16px;
+	text-shadow: 2px 2px #FCFC00;
+}
+#header h2 {
+	color:#000000;
+	font-size:200%;
+	letter-spacing:-2px;
+	text-align:right;
+	position: absolute;
+	bottom: 0px;
+	right: 16px;
+	text-shadow: 2px 2px #FCFC00;
+}
+#header img{
+	width: 100%;
+	height: auto;
+	z-index: -1;
+	background-repeat: repeat-y;
+}
+/* HEADER END */
+
+
+/* NAVIGATION START */
+#navigation {
+	background-color: #FDFDAD;
+	border-right:1px solid #999;
+	margin:0 auto;
+	width:70vw;
+	height:40px;
+	list-style:none;
+
+	z-index: 2;
+	position: relative;
+	border-left: 3px groove;
+	border-right: 3px groove;
+}
+#navigation li {
+	border-left:1px solid #999;
+	float:right;
+	width:100px;
+	list-style:none;
+}
+#navigation a {
+	color:#555;
+	display:block;
+	line-height:40px;
+	text-align:center;
+	color: black;
+}
+#navigation a:hover {
+	background:#e3e3e3;
+	color:#555;
+}
+#navigation .active {
+	background:#e3e3e3;
+	color:#777;
+}
+
+/* Cart - Navigation */
+.cart {
+	padding-top: 0.3rem;
+	padding-bottom: 0.3rem;
+	margin-right: 0.6rem;
+	margin-left: 0.3rem;
+	font-size: 2rem;
+	float: right;
+}
+
+/* Search Bar - Navigation */
+#navigation .search-container {
+  float: left;
+}
+#navigation input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+}
+#navigation .search-container button {
+  float: right;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+#navigation .search-container button:hover {
+  background: #ccc;
+}
+/* NAVIGATION END */
+
+/* CONTENT START */
+#content {
+	height:auto;
+	margin:0 auto;
+	padding:0 0 20px;
+	width:70vw;
+	background-color: #FDFDAD;
+
+	z-index: 2;
+	position: relative;
+	border-left: groove;
+	border-right: groove;
+	border-width: 3px;
+}
+#content h1 {
+	border-bottom:1px dashed #000000;
+	font-size:1.8em;
+	padding:20px 0 0;
+	color: black;
+}
+#content p {
+	padding:20px 20px 0;
+	color: black;
+}
+
+/* reg table */
+#reg tr td {
+	padding: 10px;
+}
+
+/* menu,cart,indexadmin table - START */
+.menu table{
+	margin: 1% 15%;
+	width: 70%;
+	table-layout: fixed;
+}
+#content .menu table img{
+	width: 100%;
+	height: auto;
+}
+#content .menu tr th{
+	padding: 10px;
+	border: 1px solid black;
+	width: auto;
+	text-align: center;
+	}
+#content .menu tr td{
+	padding: 10px;
+	border: 1px solid black;
+	width: auto;
+	text-align: center;
+}
+/* menu,cart,indexadmin table - END */
+
+/* use in indexadmin.php - START */
+#content .menu .btn {
+	position: relative;
+	top: 1.2em;
+	left: 2.5em;
+	transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	background-color: #FFC847;
+	font-size: 16px;
+	padding: 12px 24px;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+#content .menu .btn:hover {
+  background-color: #FCFC00;
+}
+.center .btn-group .btn {
+	position: relative;
+	top: 1.2em;
+	left: 2.5em;
+	transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	background-color: #FFC847;
+	font-size: 16px;
+	padding: 12px 24px;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+.btn-group button {
+	background-color: #FFC847;
+	border: 1px solid black;
+	padding: 10px 24px;
+	cursor: pointer;
+	float: center;
+	position: relative;
+}
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+	background-color: #FCFC00;
+}
+/* use in indexadmin.php - END */
+
+/* use in index.php - START */
+/* slideshow - content  */
+#content .mySlides {display: none;}
+#content img {vertical-align: middle;}
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+/* Fading animation - slideshow */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+@-webkit-keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+/* center text on img */
+#content .centered {
+  position: absolute;
+	text-align: center;
+	font-size: 25px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+	text-shadow: 2px 2px #FCFC00;
+}
+#content .centered .btn {
+  position: relative;
+  top: 0.5em;
+  left: 3.5em;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 20px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+#content .centered .btn:hover {
+  background-color: #FCFC00;
+}
+/* use in index.php - END */
+
+/* menu details table - START */
+* {
+  box-sizing: border-box;
+}
+.menudetails .row {
+  margin-left:-5px;
+  margin-right:-5px;
+}
+.menudetails .column {
+  float: left;
+  width: 30%;
+  padding: 5px;
+}
+/* Clearfix (clear floats) */
+.menudetails .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.menudetails table {
+	border: 1px solid black;
+  width: 100%;
+	margin: 1% 65%;
+	table-layout: fixed;
+}
+.menudetails table img{
+	width: 100%;
+	height: auto;
+}
+.menudetails th, .menudetails td {
+  text-align: center;
+  padding: 16px;
+	border: 1px solid black;
+}
+/* menu details table - END */
+
+/* payment - START*/
+.payment {
+	font-size: 17px;
+	padding: 8px;
+	box-sizing: border-box;
+}
+.payment .row {
+	display: -ms-flexbox; /* IE10 */
+	display: flex;
+	-ms-flex-wrap: wrap; /* IE10 */
+	flex-wrap: wrap;
+	margin: 0 -16px;
+}
+
+.payment .col-25 {
+	-ms-flex: 25%; /* IE10 */
+	flex: 25%;
+	padding: 0 16px;
+}
+
+.payment .col-50 {
+	-ms-flex: 50%; /* IE10 */
+	flex: 50%;
+	padding: 0 16px;
+}
+
+.payment .col-75 { /*NOT USED*/
+	-ms-flex: 75%; /* IE10 */
+	flex: 75%;
+	padding: 0 16px;
+}
+
+.payment .container {
+	background-color: #f2f2f2;
+	padding: 5px 20px 15px 20px;
+	border: 1px solid lightgrey;
+	border-radius: 3px;
+}
+
+.payment input[type=text] {
+	width: 100%;
+	margin-bottom: 20px;
+	padding: 7px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+
+.payment select {
+	width: 100%;
+	margin-bottom: 20px;
+	padding: 7px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+
+.payment label {
+	margin-bottom: 10px;
+	display: block;
+}
+
+.payment .icon-container {
+	margin-bottom: 20px;
+	padding: 7px 0;
+	font-size: 24px;
+}
+
+.payment .btn {
+	background-color: #FFC847;
+	color: black;
+	padding: 12px;
+	margin: 10px 0;
+	border: none;
+	width: 100%;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 17px;
+}
+
+.payment .btn:hover {
+	background-color: #45a049;
+}
+
+.payment a {
+	color: #2196F3;
+}
+
+.payment hr {
+	border: 1px solid lightgrey;
+}
+
+.payment span.price {
+	float: right;
+	color: grey;
+}
+/*payment - END*/
+
+/* upload - START */
+#success {
+	padding:20px 20px 0;
+	font-weight: bold;
+}
+/* upload - END */
+/* CONTENT END */
+
+/* FOOTER START */
+#footer {
+	border-top:1px solid black;
+	height:50px;
+	margin:0 auto;
+	padding:10px 0px;
+	text-align:center;
+	width:70vw;
+	background-color: #FDFDAD;
+	color: black;
+
+	z-index: 2;
+	position: relative;
+
+	border-bottom: 3px groove;
+	border-left: 3px groove;
+	border-right: 3px groove;
+}
+/* FOOTER END */
+
+/* Added by Larry Ullman: */
+.ad {
+	font-weight: bold;
+	color: #C00;
+}
+#errors {
+	padding:20px 20px 0;
+	font-weight: bold;
+	color: #FF0000;
+}
+
+input, select, .input {
+	padding: 5px;
+	font-weight: bold;
+	font-size: 1em;
+	color: #000000;
+	background: #FFFFFF;
+	border:1px dotted #000000;
+}
