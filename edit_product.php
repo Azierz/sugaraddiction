@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	require ('includes/constants.php');
 
-	$q = "UPDATE product SET Name='$eName', Price='$ePrice', Quantity='$eQty', Description='$eDesc' WHERE ProductID=$eID LIMIT 1";
+	$q = "UPDATE product SET Name='$eName', Price='$ePrice', Description='$eDesc' WHERE ProductID=$eID LIMIT 1";
 	$r = @mysqli_query ($dbc, $q);
 
 	if (mysqli_affected_rows($dbc) == 1) {

@@ -7,13 +7,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	$aName = $_POST['name'];
 	$aPrice = $_POST['price'];
-	$aQty = $_POST['qty'];
 	$aDesc = $_POST['desc'];
-	$aSize  = $_POST['size'];
 
 	require ('includes/constants.php');
 
-	$q = "INSERT INTO product VALUES (0, '$aName', NULL, '$aPrice', '$aQty', '$aDesc', '$aSize')";
+	$q = "INSERT INTO product VALUES (0, '$aName', NULL, '$aPrice', NULL, '$aDesc')";
 	$r = mysqli_query ($dbc, $q); 
 
 	if ($r) {
@@ -34,23 +32,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <form action="add_product.php" method="post">
 	<table border="0" id="reg">
 		<tr>
-			<td>Fruit Name:</td>
+			<td>Sweet Name:</td>
 			<td><input type="text" name="name" size="15" maxlength="20" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>" required /></td>
 		</tr>
 		<tr>
-			<td>Fruit Price(RM):</td>
+			<td>Sweet Price(RM):</td>
 			<td><input type="text" name="price" size="10" maxlength="20" value="<?php if (isset($_POST['price'])) echo $_POST['price']; ?>" required /></td>
-		</tr>
-		<tr>
-			<td>Quantity:</td>
-			<td><input type="text" name="qty" size="20" maxlength="40" value= "<?php if (isset($_POST['qty'])) echo $_POST['qty']; ?>" required /></td>
 		</tr>
 		<tr>
 			<td>Description:</td>
 			<td><input type="text" name="desc" size="40" maxlength="100" value="<?php if (isset($_POST['desc'])) echo $_POST['desc']; ?>" required /></td>
 		</tr>
 		<tr>
-			<td colspan="2"><input type="submit" name="submit" value="Add Fruit" /></td>
+			<td colspan="2"><input type="submit" name="submit" value="Add Sweet" /></td>
 		</tr>
 	</table>
 </form>

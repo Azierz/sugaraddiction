@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		echo "New photo has been uploaded.<br/>";
 		echo '</div><br>
 		<div class="btn-group">
-			<button align="right"><a href="edit_product.php?id='.$id.'">Back to Edit Product</a></button>
+			<button align="right"><a href="maintenance.php">Back to All Product</a></button>
 		</div>
 		<br><br><br>'; // Close div "success"
 		include ('includes/footer.html');

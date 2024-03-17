@@ -79,8 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 							<td colspan="2">Price: RM '.$data["Price"].'</td>
 						</tr>
 						<tr>
-							<td>Quantity Left:<br><br>'.$data["Quantity"].'</td>
-							<td>
+							<td colspan="2">
 							<form action="delete_product.php" method="POST">
 								<p> Confirm delete this product? </p>
 								<input type="radio" name="con_del" value="yes"> Yes
