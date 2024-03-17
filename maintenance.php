@@ -16,13 +16,12 @@ if (empty($_SESSION['AdminID'])) {
 
 <div class="menu">
 	<div class="btn-group" style="float: right; margin:-4.1em 0.5em">
-		<button><a href="add_product.php">Add New Fruit</a></button>
+		<button><a href="add_product.php">Add New Sweet</a></button>
 	</div>
 	<table border="1">
 		<tr>
-			<th>Fruit(s)</th>
+			<th>Sweet(s)</th>
 			<th>Price</th>
-			<th>Quantity</th>
 			<th>Actions</th>
 		</tr>
 		<?php
@@ -45,7 +44,6 @@ if (empty($_SESSION['AdminID'])) {
 				};
 				echo "</td>
 				<td rowspan='2'>RM ".$data['Price']."</td>
-				<td rowspan='2'>".$data['Quantity']."</td>
 				<td rowspan='2'>";
 				
 				echo '

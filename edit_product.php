@@ -8,7 +8,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$eID = $_POST['edit'];
 	$eName = $_POST['name'];
 	$ePrice = $_POST['price'];
-	$eQty = $_POST['quantity'];
 	$eDesc = $_POST['desc'];
 
 	require ('includes/constants.php');
@@ -74,8 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 							<th colspan="2">Fruit Name:<input type="text" name="name" value="'.$data["Name"].'" required></th>
 						</tr>
 						<tr>
-							<th>Price(RM): <input type="text" name="price" value="'.$data["Price"].'" size="5" required></th>
-							<th>Quantity:<input type="text" name="quantity" value="'.$data["Quantity"].'" size="5" required></th>
+							<th colspan="2">Price(RM): <input type="text" name="price" value="'.$data["Price"].'" size="5" required></th>
 						</tr>
 						<tr>
 							<th colspan="2">FRUIT DESCRIPTION: <br><input type="text" name="desc" value="'.$data["Description"].'" required></th>

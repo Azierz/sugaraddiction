@@ -8,8 +8,8 @@
 </head>
 <body>
 	<div id="header">
-		<img src = "includes/images/fff.jpg" style="width: 100%; height: auto;">
-		<h1>Fruity Fruit </h1>
+		<img src = "includes/images/cakey.png" style="width: 100%; height: auto;">
+		<h1>Sugar Addiction Website </h1>
 		<h2><?php echo $page_text; ?> </h2>
 
 		</div>
