@@ -4,9 +4,9 @@ $page_text = 'Checkout';
 include ('includes/header2.php');
 
 require ('includes/constants.php');
-foreach($_SESSION['cart1'] as $cart => $val) {
+foreach($_SESSION['cart'] as $cart => $val) {
 	$ProdID = $val;
-	$Qty = $_SESSION['qty1'][$val];
+	$Qty = $_SESSION['qty'][$val];
 
 	$q = "SELECT * FROM product WHERE ProductID='$ProdID'";
 	$r = @mysqli_query ($dbc,$q);
@@ -17,7 +17,7 @@ foreach($_SESSION['cart1'] as $cart => $val) {
 			
 			$Order_CustID = $_SESSION['CustID'];
 			$Order_ProdID = $ProdID;
-			$Order_Quantity = $_SESSION['qty1'][$val];
+			$Order_Quantity = $_SESSION['qty'][$val];
 
 			$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$Order_Quantity', NOW() )";
 			$rI = mysqli_query($dbc, $qI);

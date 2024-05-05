@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<tr>
 					<th>Product(s)</th>
 					<th>Price</th>
-					<th>Cake Size</th>
 					<th>Quantity</th>
 					<th>Personalized Message</th>
 					<th>Total</th>
@@ -30,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<?php
 				require ('includes/constants.php');
 
-				if (empty($_SESSION["cart1"]) && empty($_SESSION["cart2"])) {
+				if (empty($_SESSION["cart"])) {
 					echo '
 						<script>
 						window.alert("\nShopping Cart Empty!");
@@ -39,13 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				}
 					
 				$TotalPayment = 0;
-				if(!empty($_SESSION["cart1"])){
-				foreach($_SESSION['cart1'] as $cart => $val) {
+				if(!empty($_SESSION["cart"])){
+				foreach($_SESSION['cart'] as $cart => $val) {
 					
 					$ProdID = $val;
-					$Qty = $_SESSION['qty1'][$val];
-					$size = $_SESSION["cakesize1"][$val];
-					$Sms = $_SESSION["sms1"][$val];
+					$Qty = $_SESSION['qty'][$val];
+					$Sms = $_SESSION["sms"][$val];
 
 					$q = "SELECT * FROM product WHERE ProductID='$ProdID'";
 					$r = @mysqli_query ($dbc,$q);
@@ -68,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 							};
 							echo "</td>
 							<td rowspan='2'>RM ".$Price."</td>
-							<td rowspan='2'>".$size."</td>
 							<td rowspan='2'>".$Qty."</td>
 							<td rowspan='2'>".$Sms."</td>
 							<td rowspan='2'>RM ".$TotalPrice."</td>
@@ -80,46 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					}} 
 				}}
 
-				if(!empty($_SESSION["cart2"])){
-				foreach($_SESSION['cart2'] as $cart2 => $val2) {
-									
-					$ProdID = $val2;
-					$Qty = $_SESSION['qty2'][$val2];
-					$size = $_SESSION["cakesize2"][$val2];
-					$Sms = $_SESSION["sms2"][$val2];
-
-					$q = "SELECT * FROM product WHERE ProductID='$ProdID'";
-					$r = @mysqli_query ($dbc,$q);
-
-					if (mysqli_num_rows($r) == 1) {
-						
-					while ($data = mysqli_fetch_array($r)) {
-						
-						$Price = $data['Price'];
-						$TotalPrice = number_format((double)$Qty*$Price, 2 ,'.', ',');
-						$TotalPayment = number_format((double)$TotalPayment+$TotalPrice, 2 ,'.', ',');
-
-						echo "
-						<tr>
-							<td style=\"border-bottom: 0px\">";
-							if (!isset($data['Image'])) {
-								echo "<img src=\"includes/images/image_na.png\"";
-							} else {
-								echo "<img src=\"includes/images/".$data['Image']."\"";
-							};
-							echo "</td>
-							<td rowspan='2'>RM ".$Price."</td>
-							<td rowspan='2'>".$size."</td>
-							<td rowspan='2'>".$Qty."</td>
-							<td rowspan='2'>".$Sms."</td>
-							<td rowspan='2'>RM ".$TotalPrice."</td>
-						</tr>
-						<tr>
-							<td style=\"border-top: 0px\">".$data['Name']."</td>
-						</tr>
-						";
-					}} 
-				}}
+				
 				?>
 			 </table>
 			

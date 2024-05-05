@@ -7,7 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	
 	$CartID = $_POST['cart'];
 	$CartQty = $_POST['qty'];
-	$CartSize = $_POST['cake_size'];
 	$CartSms = $_POST['sms'];
 
 	require ('includes/constants.php');
@@ -21,39 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		setTimeout(function(){location.href="menu.php"},0);
 		</script>';
 	} else {
-		if ($CartSize == "7 Inch (1KG)") {
-			// For Cake Size 7 inch (1KG)
-			$i = $_POST["cart"];
-			$qty = $_SESSION["qty1"][$i] + $CartQty;
-			$_SESSION["amounts1"][$i] = $amounts[$i] * $qty;
-			$_SESSION["cart1"][$i] = $i;
-			$_SESSION["qty1"][$i] = $qty;
-			$_SESSION["cakesize1"][$i] = $CartSize;
-
-			if (!empty($CartSms)) {
-				$_SESSION["sms1"][$i] = $CartSms;
-			} else {
-				$_SESSION["sms1"][$i] = null;
-			}
-			
-
-		} else {
-			// For Cake Size 9 inch (2KG)
-			$j = $_POST["cart"];
-			$qty = $_SESSION["qty2"][$j] + $CartQty;
-			$_SESSION["amounts2"][$j] = $amounts[$j] * $qty;
-			$_SESSION["cart2"][$j] = $j;
-			$_SESSION["qty2"][$j] = $qty;
-			$_SESSION["cakesize2"][$j] = $CartSize;
-
-			if (!empty($CartSms)) {
-				$_SESSION["sms2"][$j] = $CartSms;
-			} else {
-				$_SESSION["sms2"][$j] = null;
-			}
-			
-		}
 		
+		
+			$i = $_POST["cart"];
+			$qty = $_SESSION["qty"][$i] + $CartQty;
+			$_SESSION["amounts"][$i] = $amounts[$i] * $qty;
+			$_SESSION["cart"][$i] = $i;
+			$_SESSION["qty"][$i] = $qty;
+
+			if (!empty($CartSms)) {
+				$_SESSION["sms"][$i] = $CartSms;
+			} else {
+				$_SESSION["sms"][$i] = null;
+			}
+	
 
 		echo '<script>
 		window.alert("\nSUCCESS!\nProduct added to cart.");
@@ -109,14 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 							<td colspan="2">Price: RM '.$data["Price"].'</td>
 						</tr>
 						<tr>
-							<td>
-									Cake Size:<br><br>
-									<input type="radio" id="7inch" name="cake_size" value="7 Inch (1KG)" required>
-									<label for="7inch">7 Inch (1KG)</label><br>
-									<input type="radio" id="9inch" name="cake_size" value="9 Inch (2KG)">
-									<label for="9inch">9 Inch (2KG)</label><br>
-							</td>
-							<td>Quantity:<br><br><input type="number" name="qty" size=5 value="1" min=1 max=999></td>
+							<td colspan="2">Quantity:<br><br><input type="number" name="qty" size=5 value="1" min=1 max=999></td>
 						</tr>
 						<tr>
 							<td colspan="2">Personalized Message (Optional):<br><br><textarea name="sms" rows="4" cols="30"></textarea></td>
