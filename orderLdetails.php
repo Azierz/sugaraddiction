@@ -26,7 +26,7 @@ if (empty($_SESSION['AdminID'])) {
 			<th>Quantity</th>
 			<th>Total Price</th>
 			<th>Receipt</th>
-			<th>View Product</th>
+			<th colspan=4>Update Status</th>
 		</tr>
 		<?php
 		require ('includes/constants.php');
@@ -74,18 +74,31 @@ if (empty($_SESSION['AdminID'])) {
 			}
 			
 			
-			echo '<td>
-				<form action="orderPdetails.php" method="GET">
-					<input type="text" name="ProdID" value="'.$data["ProdID"].'" hidden>
-					<input type="text" name="ProdName" value="'.$dataP["Name"].'" hidden>
-					<input type="submit" name="submit" value="View Product" />
-				</form></td>
+			// echo '<td>
+			// 	<form action="orderPdetails.php" method="GET">
+			// 		<input type="text" name="ProdID" value="'.$data["ProdID"].'" hidden>
+			// 		<input type="text" name="ProdName" value="'.$dataP["Name"].'" hidden>
+			// 		<input type="submit" name="submit" value="View Product" />
+			// 	</form></td>';
+				echo'<td colspan=4><label>' .pmethod().' </label></td>
 			</tr>';
 			
 		}}
-		?>
+		
+			function pmethod() {
+				$Pmethod = array ('Online' => 'Delivery - Online Payment', 'COD' =>  'Self Pickup - Cash On Delivery',);
+
+				echo '<select name="Pmethod">';
+				foreach ($Pmethod as $key => $value) {
+					echo "<option value=\"$key\">$value</option>\n";
+				}
+				echo '</select>';
+			}
+?>
+		
 	</table>
 </div>
+
 <?php
 include ('includes/footer.html');
 ?>

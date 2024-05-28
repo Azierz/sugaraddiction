@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<h1>Fruity Fruit Cart</h1>
+<h1>Sugar Addiction Cart</h1>
 
 		<div class="menu">
 			<table border="1">
@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<th>Quantity</th>
 					<th>Personalized Message</th>
 					<th>Total</th>
+					<th>Action(s)</th>
 				</tr>
 				<?php
 				require ('includes/constants.php');
@@ -69,6 +70,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 							<td rowspan='2'>".$Qty."</td>
 							<td rowspan='2'>".$Sms."</td>
 							<td rowspan='2'>RM ".$TotalPrice."</td>
+							<td rowspan='2'>";
+							$dt = $data["ProductID"];
+							// TO BE CONFIRMED LATER HOW TO EDIT CART AFTER ADD TO CART
+							echo '
+							<form action="menudetails.php" method="GET">
+								<input type="text" name="ProductID" value="'.$data["ProductID"].'" hidden>
+								<input type="submit" name="submit" value="More Details" />
+							</form>';
+							echo "</td>
 						</tr>
 						<tr>
 							<td style=\"border-top: 0px\">".$data['Name']."</td>
@@ -83,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			
 			<table>
 				<tr>
-					<th style="text-align: left; border: 0px">SHIPPING ADDRESS</th>
+					<th style="text-align: left; border: 0px">DELIVERY ADDRESS</th>
 				</tr>
 				<tr>
 					<td style="text-align: left"><?php echo $_SESSION['Address']; ?></td>
@@ -97,7 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				</tr>
 				<tr>
 					<td style="text-align: left">RM<?php echo $TotalPayment; ?></td>
-					<td style="text-align: left"><label><?php pmethod(); ?></td>
+					<td style="text-align: left"><label><?php pmethod(); ?>
+					<br><b>DELIVERY CHARGE: RM5.00<br><br>
+						NOTE: Order above RM100 will get free delivery</b></label></td>
 				</tr>
 			</table>
 
@@ -111,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		<?php
 		function pmethod() {
-			$Pmethod = array ('Online' => 'Online Payment', 'COD' =>  'Cash On Delivery',);
+			$Pmethod = array ('Online' => 'Delivery - Online Payment', 'COD' =>  'Self Pickup - Cash On Delivery',);
 
 			echo '<select name="Pmethod">';
 			foreach ($Pmethod as $key => $value) {

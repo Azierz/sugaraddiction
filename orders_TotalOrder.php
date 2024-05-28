@@ -24,15 +24,18 @@ if (empty($_SESSION['AdminID'])) {
 		<tr>
 			<th>Date Ordered</th>
 			<th>Customer's Name</th>
+			<th>Customer's Phone Number</th>
 			<th>Total Item(s)</th>
-			<th>View Details</th>
+			<th>Current Status</th>
+			<th>View Order Status</th>
 		</tr>
 		<?php
 		require ('includes/constants.php');
 
 		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, Quantity, Order_Date
         FROM cust_order
-        GROUP BY CustID, Order_Date";
+        GROUP BY CustID, Order_Date
+		ORDER BY Order_Date DESC;";
 		$r = @mysqli_query ($dbc,$q);
 
 		if (!mysqli_num_rows($r) == 1) {
@@ -54,9 +57,11 @@ if (empty($_SESSION['AdminID'])) {
 			// j M Y - short form for month | j F Y - full name for month
 			// H:i:s A, j M Y - time, date | j M Y, H:i:s A - date, time
 			echo '
-				<td align="left">'.$dataC['CustName'].'</td>';
+				<td align="left">'.$dataC['CustName'].'</td>
+				<td align="left">'.$dataC['PhoneNum'].'</td>';
 			// if(mysqli_num_rows($rP) == 1) {
-				echo '<td align="left">'.$data['ProdID'].'</td>';
+				echo '<td align="left">'.$data['ProdID'].'</td>
+				<td align="left">PENDING</td>';
 				// <td align="left">'.$data['Quantity'].'</td>';
 			// } else {
 			// 	echo '<td align="left" colspan="2"><i>Product No Longer Available</i></td>';
