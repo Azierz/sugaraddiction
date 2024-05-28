@@ -65,12 +65,12 @@ if (empty($_SESSION['AdminID'])) {
 				<td align="left">RM'.$sumProd.'</td>
 				<td>';
 				if (!isset($data["Receipt"])) {
-					echo 'Payment by Cash';
+					echo 'Payment by Cash</td>';
 				} else {
-					echo '<img src="'.$data["Receipt"].'"/>';
+					echo '<img src="'.$data["Receipt"].'"/></td>';
 				};
 			} else {
-				echo '</td><td align="left" colspan="4"><i>Product No Longer Available</i></td>';
+				echo '<td align="left" colspan="4"><i>Product No Longer Available</i></td>';
 			}
 			
 			
@@ -80,19 +80,18 @@ if (empty($_SESSION['AdminID'])) {
 			// 		<input type="text" name="ProdName" value="'.$dataP["Name"].'" hidden>
 			// 		<input type="submit" name="submit" value="View Product" />
 			// 	</form></td>';
-				echo'<td colspan=4><label>' .pmethod().' </label></td>
-			</tr>';
-			
+				echo'<label>' .pmethod().'</label>
+			</tr>'; 
 		}}
 		
 			function pmethod() {
 				$Pmethod = array ('Online' => 'Delivery - Online Payment', 'COD' =>  'Self Pickup - Cash On Delivery',);
 
-				echo '<select name="Pmethod">';
+				echo '<td colspan=4><select name="Pmethod">';
 				foreach ($Pmethod as $key => $value) {
 					echo "<option value=\"$key\">$value</option>\n";
 				}
-				echo '</select>';
+				echo '</select></td>';
 			}
 ?>
 		
