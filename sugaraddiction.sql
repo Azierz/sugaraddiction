@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 05, 2024 at 08:14 PM
+-- Generation Time: Jun 05, 2024 at 05:37 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.0.19
 
@@ -82,6 +82,7 @@ CREATE TABLE `cust_order` (
   `ProdID` int(10) NOT NULL,
   `Quantity` int(10) NOT NULL,
   `Receipt` varchar(255) DEFAULT NULL,
+  `Status` varchar(255) DEFAULT NULL,
   `Order_Date` datetime NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -89,32 +90,32 @@ CREATE TABLE `cust_order` (
 -- Dumping data for table `cust_order`
 --
 
-INSERT INTO `cust_order` (`OrderID`, `CustID`, `ProdID`, `Quantity`, `Receipt`, `Order_Date`) VALUES
-(1, 1, 1, 1, NULL, '2022-01-02 19:36:18'),
-(2, 5, 6, 1, NULL, '2022-01-02 22:57:42'),
-(3, 5, 5, 1, NULL, '2022-01-02 22:57:42'),
-(4, 5, 6, 3, NULL, '2022-01-03 02:35:55'),
-(5, 5, 4, 1, NULL, '2022-01-03 02:35:55'),
-(6, 5, 5, 1, NULL, '2022-01-03 02:35:55'),
-(7, 5, 5, 2, NULL, '2022-01-03 02:36:39'),
-(8, 5, 1, 2, NULL, '2024-03-10 15:42:25'),
-(9, 5, 1, 1, NULL, '2024-03-10 18:35:28'),
-(10, 5, 1, 1, NULL, '2024-03-13 00:43:25'),
-(11, 5, 5, 3, NULL, '2024-03-13 00:43:25'),
-(12, 5, 1, 1, NULL, '2024-03-14 19:50:20'),
-(13, 5, 1, 1, NULL, '2024-05-03 01:03:52'),
-(14, 5, 4, 1, NULL, '2024-05-03 01:19:35'),
-(15, 5, 4, 1, NULL, '2024-05-03 03:31:20'),
-(16, 5, 1, 1, NULL, '2024-05-03 03:42:49'),
-(17, 5, 4, 1, NULL, '2024-05-03 03:42:49'),
-(18, 5, 1, 2, NULL, '2024-05-03 03:45:21'),
-(19, 5, 4, 2, NULL, '2024-05-03 03:45:21'),
-(20, 5, 12, 1, NULL, '2024-05-03 03:45:21'),
-(21, 5, 1, 2, 'includes/receipts/6633ee4563ef0-cakey.png', '2024-05-03 03:49:25'),
-(22, 5, 4, 2, 'includes/receipts/6633ee4563ef0-cakey.png', '2024-05-03 03:49:25'),
-(23, 5, 12, 1, 'includes/receipts/6633ee4563ef0-cakey.png', '2024-05-03 03:49:25'),
-(24, 5, 11, 1, 'includes/receipts/6637c7d720479-sweet3.png', '2024-05-06 01:54:31'),
-(25, 5, 1, 1, 'includes/receipts/6637c7d720479-sweet3.png', '2024-05-06 01:54:31');
+INSERT INTO `cust_order` (`OrderID`, `CustID`, `ProdID`, `Quantity`, `Receipt`, `Status`, `Order_Date`) VALUES
+(1, 1, 1, 1, NULL, NULL, '2022-01-02 19:36:18'),
+(2, 5, 6, 1, NULL, NULL, '2022-01-02 22:57:42'),
+(3, 5, 5, 1, NULL, NULL, '2022-01-02 22:57:42'),
+(4, 5, 6, 3, NULL, NULL, '2022-01-03 02:35:55'),
+(5, 5, 4, 1, NULL, NULL, '2022-01-03 02:35:55'),
+(6, 5, 5, 1, NULL, NULL, '2022-01-03 02:35:55'),
+(7, 5, 5, 2, NULL, NULL, '2022-01-03 02:36:39'),
+(8, 5, 1, 2, NULL, NULL, '2024-03-10 15:42:25'),
+(9, 5, 1, 1, NULL, NULL, '2024-03-10 18:35:28'),
+(10, 5, 1, 1, NULL, NULL, '2024-03-13 00:43:25'),
+(11, 5, 5, 3, NULL, NULL, '2024-03-13 00:43:25'),
+(12, 5, 1, 1, NULL, NULL, '2024-03-14 19:50:20'),
+(13, 5, 1, 1, NULL, NULL, '2024-05-03 01:03:52'),
+(14, 5, 4, 1, NULL, NULL, '2024-05-03 01:19:35'),
+(15, 5, 4, 1, NULL, NULL, '2024-05-03 03:31:20'),
+(16, 5, 1, 1, NULL, NULL, '2024-05-03 03:42:49'),
+(17, 5, 4, 1, NULL, NULL, '2024-05-03 03:42:49'),
+(18, 5, 1, 2, NULL, NULL, '2024-05-03 03:45:21'),
+(19, 5, 4, 2, NULL, NULL, '2024-05-03 03:45:21'),
+(20, 5, 12, 1, NULL, NULL, '2024-05-03 03:45:21'),
+(21, 5, 1, 2, 'includes/receipts/6633ee4563ef0-cakey.png', NULL, '2024-05-03 03:49:25'),
+(22, 5, 4, 2, 'includes/receipts/6633ee4563ef0-cakey.png', NULL, '2024-05-03 03:49:25'),
+(23, 5, 12, 1, 'includes/receipts/6633ee4563ef0-cakey.png', NULL, '2024-05-03 03:49:25'),
+(24, 5, 11, 1, 'includes/receipts/6637c7d720479-sweet3.png', '', '2024-05-06 01:54:31'),
+(25, 5, 1, 1, 'includes/receipts/6637c7d720479-sweet3.png', 'Received_Pending', '2024-05-06 01:54:31');
 
 -- --------------------------------------------------------
 
@@ -136,11 +137,13 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`ProductID`, `Name`, `Image`, `Price`, `Size`, `Description`) VALUES
-(1, 'Brownies', 'brownies.jpg', '35.00', NULL, 'Brownies'),
-(4, 'Cookies', 'cookies.png', '3.50', NULL, 'Cookies - 1 pcs'),
-(12, 'Cake', 'cake.jpg', '40.00', NULL, '5 inch RM40, 6 inch RM50, 7 inch RM60 (design not included)'),
-(6, 'Creampuff', 'creampuff.jpg', '20.00', NULL, 'Creampuff - 16 pcs'),
-(11, 'Lotus Cheesecake', 'lotus_cheesecake.jpg', '60.00', NULL, 'Lotus Cheesecake');
+(1, 'Brownies ', 'brownies.jpg', '35.00', NULL, 'AVAILABLE ONLY 1 SIZE - 9x9 inches | DESIGN NOT INCLUDED - Please contact us before order for any personalized toppings/designs'),
+(4, 'Cookies', 'cookies.png', '3.50', NULL, 'Price for 1 pcs | MINIMUM ORDER = 20pcs'),
+(12, 'Cake (5 inch)', 'cake.jpg', '40.00', NULL, 'DESIGN NOT INCLUDED - Please contact us before order for any personalized toppings/designs'),
+(6, 'Creampuff (1 box)', 'creampuff.jpg', '20.00', NULL, 'Price for 1 box (16 pcs)'),
+(11, 'Lotus Cheesecake', 'lotus_cheesecake.jpg', '60.00', NULL, 'DESIGN NOT INCLUDED - Please contact us before order for any personalized toppings/designs'),
+(14, 'Cake (7 inch)', 'cakes.png', '60.00', NULL, 'DESIGN NOT INCLUDED - Please contact us before order for any personalized toppings/designs'),
+(13, 'Cake (6 inch)', 'image_bg.png', '50.00', NULL, 'DESIGN NOT INCLUDED - Please contact us before order for any personalized toppings/designs');
 
 --
 -- Indexes for dumped tables
@@ -196,7 +199,7 @@ ALTER TABLE `cust_order`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `ProductID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ProductID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
