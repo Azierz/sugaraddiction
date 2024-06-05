@@ -2,6 +2,7 @@
 $page_title = 'Order List';
 $page_text = 'Order List';
 include ('includes/header.php');
+require ('includes/constants.php');
 $CustName = $_GET["CustName"];
 
 if (empty($_SESSION['AdminID'])) {
@@ -10,6 +11,28 @@ if (empty($_SESSION['AdminID'])) {
 		window.alert("\nPLEASE LOGIN FIRST!");
 		setTimeout(function(){location.href="login.php"},0);
 		</script>';
+}
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+	$StatusUpdate = $_POST['StatusUpdate'];
+	$OrderDate = $_POST['OrderDate'];
+	$CID = $_POST['CustID'];
+	$PID = $_POST['ProdID'];
+
+	$eID = $_POST['edit'];
+	$eName = $_POST['name'];
+	$ePrice = $_POST['price'];
+	$eDesc = $_POST['desc'];
+
+
+	$qU = "UPDATE cust_order SET Status='$StatusUpdate' WHERE Order_Date = '$OrderDate' AND CustID = '$CID' AND ProdID = '$PID' LIMIT 1";
+	$rU = @mysqli_query ($dbc, $qU);
+
+
+	
+
 }
 ?>
 
@@ -29,7 +52,7 @@ if (empty($_SESSION['AdminID'])) {
 			<th colspan=4>Update Status</th>
 		</tr>
 		<?php
-		require ('includes/constants.php');
+		
 
 		$OrderDate = $_GET["Order_Date"];
 		
@@ -52,48 +75,69 @@ if (empty($_SESSION['AdminID'])) {
 			$rP = @mysqli_query ($dbc,$qP);
 			$dataP = mysqli_fetch_array($rP);
 
-			
+			$numRows = mysqli_num_rows($rP);
+
+			echo $numRows;
 
 			echo '<tr>';
 			echo "<td>" . date("H:i:s A", strtotime($data['Order_Date'])) . "
 			<br>" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
-			if(mysqli_num_rows($rP) == 1) {
+			if($numRows == 1) {
 				$sumProd = $dataP['Price']*$data['Quantity'];
 				echo '
 				<td align="left">'.$dataP['Name'].'</td>
 				<td align="left">'.$data['Quantity'].'</td>
 				<td align="left">RM'.$sumProd.'</td>
-				<td>';
-				if (!isset($data["Receipt"])) {
-					echo 'Payment by Cash</td>';
-				} else {
-					echo '<img src="'.$data["Receipt"].'"/></td>';
-				};
+				';
+				
+				if (empty($receipt)) {
+					if (!isset($data["Receipt"])) {
+						echo '<td rowspan='.$numRows.'>Payment by Cash</td>';
+					} else {
+						echo '<td rowspan='.$numRows.'><img src="'.$data["Receipt"].'"/></td>';
+						$receipt = $data["Receipt"];
+					};
+
+				}
+				
 			} else {
 				echo '<td align="left" colspan="4"><i>Product No Longer Available</i></td>';
-			}
+			}}
 			
-			
-			// echo '<td>
-			// 	<form action="orderPdetails.php" method="GET">
-			// 		<input type="text" name="ProdID" value="'.$data["ProdID"].'" hidden>
-			// 		<input type="text" name="ProdName" value="'.$dataP["Name"].'" hidden>
-			// 		<input type="submit" name="submit" value="View Product" />
-			// 	</form></td>';
-				echo'<label>' .pmethod().'</label>
+				echo'<form action="orderLdetails.php" id=statupd method="POST">
+				<input type="text" name="OrderDate" value="'.$OrderDate.'" hidden>
+				<input type="text" name="CustID" value="'.$c.'" hidden>
+				<input type="text" name="ProdID" value="'.$p.'" hidden>
+				<label>' .StatusUpdate().'</label>
 			</tr>'; 
-		}}
+		} 
+		echo '<td colspan=9><input type="submit" name="submit" value="Save Change" /></form></td>';
 		
-			function pmethod() {
-				$Pmethod = array ('Online' => 'Delivery - Online Payment', 'COD' =>  'Self Pickup - Cash On Delivery',);
+			function StatusUpdate() {
+				$StatusUpdate = array ('Received_Pending' => 'Received, Pending Verification', 'Received_Verified' =>  'Received, Verified', 'Rejected' =>  'Order Rejected', 'In_Progress' =>  'In Progress', 'Pickup/Delivery' =>  'Ready for pickup/delivery', 'Complete' =>  'Order Complete',);
 
-				echo '<td colspan=4><select name="Pmethod">';
-				foreach ($Pmethod as $key => $value) {
+				echo '<td colspan=4><select name="StatusUpdate" id=statusDropdown>';
+				foreach ($StatusUpdate as $key => $value) {
 					echo "<option value=\"$key\">$value</option>\n";
 				}
 				echo '</select></td>';
 			}
 ?>
+<!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Add this script after your dropdown menu -->
+<script>
+  $(document).ready(function() {
+    // Assuming your dropdown menu has an ID of "statusDropdown"
+    $('#statusDropdown').on('change', function() {
+      const selectedStatus = $(this).val(); // Get the selected value
+      // Programmatically submit the form
+      $('#statupd').submit(); // Replace with your actual form ID
+    });
+  });
+</script>
+
 		
 	</table>
 </div>
