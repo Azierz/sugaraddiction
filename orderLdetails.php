@@ -21,17 +21,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$CID = $_POST['CustID'];
 	$PID = $_POST['ProdID'];
 
-	$eID = $_POST['edit'];
-	$eName = $_POST['name'];
-	$ePrice = $_POST['price'];
-	$eDesc = $_POST['desc'];
-
-
 	$qU = "UPDATE cust_order SET Status='$StatusUpdate' WHERE Order_Date = '$OrderDate' AND CustID = '$CID' AND ProdID = '$PID' LIMIT 1";
 	$rU = @mysqli_query ($dbc, $qU);
 
-
-	
+	// if (mysqli_affected_rows($dbc) == 1) {
+	// 	echo '<script>
+	// 	window.alert("\nSUCCESS!\Status has been updated.");
+	// 	setTimeout(function(){location.href="orders_TotalOrder.php"},0);
+	// 	</script>';
+	// } else {
+	// 	echo '<script>
+	// 	window.alert("\ERROR!\Status cannot not be updated.\nPlease try again later.");
+	// 	setTimeout(function(){location.href="orders_TotalOrder.php"},0);
+	// 	</script>';
+	// }
 
 }
 ?>
