@@ -45,6 +45,7 @@ if (empty($_SESSION['AdminID'])) {
 
 			$c = $data['CustID'];
 			$p = $data['ProdID'];
+			$OD = $data['Order_Date'];
 
 			$qC = "SELECT * FROM customer WHERE CustID = '$c'";
 			$rC = @mysqli_query ($dbc,$qC);
@@ -52,6 +53,9 @@ if (empty($_SESSION['AdminID'])) {
 			$qP = "SELECT * FROM product WHERE ProductID = '$p'";
 			$rP = @mysqli_query ($dbc,$qP);
 			$dataP = mysqli_fetch_array($rP);
+			$qOD = "SELECT * FROM cust_order WHERE Order_date = '$OD'";
+			$rOD = @mysqli_query ($dbc,$qOD);
+			$dataOD = mysqli_fetch_array($rOD);
 
 			echo "<tr><td>" . date("H:i:s A", strtotime($data['Order_Date'])) . "<br>" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
 			// j M Y - short form for month | j F Y - full name for month
@@ -61,7 +65,7 @@ if (empty($_SESSION['AdminID'])) {
 				<td align="left">'.$dataC['PhoneNum'].'</td>';
 			// if(mysqli_num_rows($rP) == 1) {
 				echo '<td align="left">'.$data['ProdID'].'</td>
-				<td align="left">PENDING</td>';
+				<td align="left">'.$dataOD['StatusUpdate'].'</td>';
 				// <td align="left">'.$data['Quantity'].'</td>';
 			// } else {
 			// 	echo '<td align="left" colspan="2"><i>Product No Longer Available</i></td>';

@@ -18,23 +18,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	$StatusUpdate = $_POST['StatusUpdate'];
 	$OrderDate = $_POST['OrderDate'];
-	$CID = $_POST['CustID'];
-	$PID = $_POST['ProdID'];
+	$OrderID = $_POST['OrderID'];
 
-	$qU = "UPDATE cust_order SET Status='$StatusUpdate' WHERE Order_Date = '$OrderDate' AND CustID = '$CID' AND ProdID = '$PID' LIMIT 1";
+
+
+	$qU = "UPDATE cust_order SET StatusUpdate = '$StatusUpdate' WHERE Order_Date = '$OrderDate' ";
 	$rU = @mysqli_query ($dbc, $qU);
 
-	// if (mysqli_affected_rows($dbc) == 1) {
-	// 	echo '<script>
-	// 	window.alert("\nSUCCESS!\Status has been updated.");
-	// 	setTimeout(function(){location.href="orders_TotalOrder.php"},0);
-	// 	</script>';
-	// } else {
-	// 	echo '<script>
-	// 	window.alert("\ERROR!\Status cannot not be updated.\nPlease try again later.");
-	// 	setTimeout(function(){location.href="orders_TotalOrder.php"},0);
-	// 	</script>';
-	// }
+	if (mysqli_affected_rows($dbc) > 0) {
+		echo '<script>
+		window.alert("\nSUCCESS!\nStatus has been updated.");
+		setTimeout(function(){location.href="orders_TotalOrder.php"},0);
+		</script>';
+	} else {
+		echo '<script>
+		window.alert("\ERROR!\nStatus cannot not be updated.\nPlease try again later.");
+		setTimeout(function(){location.href="orders_TotalOrder.php"},0);
+		</script>';
+	}
+	
 
 }
 ?>
@@ -52,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			<th>Quantity</th>
 			<th>Total Price</th>
 			<th>Receipt</th>
-			<th colspan=4>Update Status</th>
 		</tr>
 		<?php
 		
@@ -68,8 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else {
 		while ($data = mysqli_fetch_array($r)) {
 
+			$OrderID = $data['OrderID'];
 			$c = $data['CustID'];
 			$p = $data['ProdID'];
+			$SU = $data['StatusUpdate'];
 
 			$qC = "SELECT * FROM customer WHERE CustID = '$c'";
 			$rC = @mysqli_query ($dbc,$qC);
@@ -78,52 +81,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$rP = @mysqli_query ($dbc,$qP);
 			$dataP = mysqli_fetch_array($rP);
 
-			$numRows = mysqli_num_rows($rP);
-
-			echo $numRows;
+			
+			
 
 			echo '<tr>';
 			echo "<td>" . date("H:i:s A", strtotime($data['Order_Date'])) . "
 			<br>" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
-			if($numRows == 1) {
+			if(mysqli_num_rows($rP) == 1) {
 				$sumProd = $dataP['Price']*$data['Quantity'];
 				echo '
 				<td align="left">'.$dataP['Name'].'</td>
 				<td align="left">'.$data['Quantity'].'</td>
 				<td align="left">RM'.$sumProd.'</td>
 				';
-				
-				if (empty($receipt)) {
-					if (!isset($data["Receipt"])) {
-						echo '<td rowspan='.$numRows.'>Payment by Cash</td>';
-					} else {
-						echo '<td rowspan='.$numRows.'><img src="'.$data["Receipt"].'"/></td>';
-						$receipt = $data["Receipt"];
-					};
-
-				}
-				
+				if(empty($receipt)) {
+				if (!isset($data["Receipt"])) {
+					echo '<td rowspan = 100000>Payment by Cash</td>';
+					$receipt = 1;
+				} else {
+					echo '<td rowspan = 100000><img src="'.$data["Receipt"].'"/></td>';
+				}$receipt = 1;};
 			} else {
 				echo '<td align="left" colspan="4"><i>Product No Longer Available</i></td>';
-			}}
+			}
 			
-				echo'<form action="orderLdetails.php" id=statupd method="POST">
-				<input type="text" name="OrderDate" value="'.$OrderDate.'" hidden>
-				<input type="text" name="CustID" value="'.$c.'" hidden>
-				<input type="text" name="ProdID" value="'.$p.'" hidden>
-				<label>' .StatusUpdate().'</label>
-			</tr>'; 
-		} 
-		echo '<td colspan=9><input type="submit" name="submit" value="Save Change" /></form></td>';
+			echo'
+		</tr>'; 
+		}} echo'<form action="orderLdetails.php" id=statupd method="POST">
+			<input type="text" name="OrderDate" value="'.$OrderDate.'" hidden>
+			<input type="text" name="OrderID" value="'.$OrderID.'" hidden>
+			<label>' .StatusUpdate($SU).'</label>';
 		
-			function StatusUpdate() {
-				$StatusUpdate = array ('Received_Pending' => 'Received, Pending Verification', 'Received_Verified' =>  'Received, Verified', 'Rejected' =>  'Order Rejected', 'In_Progress' =>  'In Progress', 'Pickup/Delivery' =>  'Ready for pickup/delivery', 'Complete' =>  'Order Complete',);
+		// echo '<td colspan=9><input type="submit" name="submit" value="Save Change" /></td>';
+		
+			function StatusUpdate($SU) {
+				$StatusUpdate = array ('Received_Pending' => 'Received, Pending Verification', 'Received_Verified' =>  'Received, Verified', 'Rejected' =>  'Rejected', 'In_Progress' =>  'In Progress', 'Pickup/Delivery' =>  'Ready for pickup/delivery', 'Complete' =>  'Order Complete',);
 
-				echo '<td colspan=4><select name="StatusUpdate" id=statusDropdown>';
-				foreach ($StatusUpdate as $key => $value) {
-					echo "<option value=\"$key\">$value</option>\n";
-				}
+				echo '<td colspan=4><select name="StatusUpdate" id=statusDropdown form=statupd>';
+				foreach ($StatusUpdate as $key => $value) {	echo "<option value=\"$key\"";
+					if ($SU == $key) {echo " selected";}	echo ">$value</option>\n";}
 				echo '</select></td>';
+				// ======================================================================================
+				// echo '<td colspan=4><select name="StatusUpdate" id=statusDropdown form=statupd>';
+				// foreach ($StatusUpdate as $key => $value) {
+				// 	echo "<option value=\"$key\">$value</option>\n";
+				// }
+				// echo '</select></td>';
 			}
 ?>
 <!-- Include jQuery library -->
