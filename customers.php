@@ -21,6 +21,7 @@ if (empty($_SESSION['AdminID'])) {
 			<th>Email Address</th>
 			<th>Phone Number</th>
 			<th>Address</th>
+			<th>Registration Date</th>
 		</tr>
 		<?php
 		require ('includes/constants.php');
@@ -38,6 +39,7 @@ if (empty($_SESSION['AdminID'])) {
 				<td align="left">'.$data['Email'].'</td>
 				<td align="left">'.$data['PhoneNum'].'</td>
 				<td align="left">'.$data['Address'].'</td>
+				<td align="left"> 10 May 2024 </td>
 			</tr>';
 		}}
 		?>

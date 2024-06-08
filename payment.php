@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 						$Order_ProdID = $ProdID;
 						$Order_Quantity = $_SESSION['qty'][$val];
 			
-						$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$Order_Quantity', '$target_file', NOW() )";
+						$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$Order_Quantity', '$target_file', null, NOW() )";
 						$rI = mysqli_query($dbc, $qI);
 					
 					}
@@ -173,8 +173,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 					';
 				}}
 		}}
-		$TotalPayment += 5; //Adding shipping fee to total payment
-		echo '<p>Delivery Charge <span class="price">RM5.00</span></p>
+		if ($TotalPayment < 100) {
+			$TotalPayment += 5; //Adding shipping fee to total payment
+		echo '<p>Delivery Charge <span class="price">RM5.00</span></p>';
+			
+		}
+		echo'
 		<hr><p>Total <span class="price" style="color:black"><b>RM'.$TotalPayment.'</b></span></p>';
 		?>
 		</div>

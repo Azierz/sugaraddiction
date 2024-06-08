@@ -11,13 +11,15 @@ if (empty($_SESSION['AdminID'])) {
 		setTimeout(function(){location.href="login.php"},0);
 		</script>';
 }
+
 ?>
 
 <h1>Product List for <?php echo $ProdName ?></h1>
 
+
 <div class="menu">
 <div class="btn-group" style="float: right; margin:-4.1em 0.5em">
-		<button><a href="orders_ProductSold.php">Back to Order History</a></button>
+<button><a href="orders_ProductSold.php">Back to Product Sold List</a></button>
 	</div>
 	<table border="1">
 		<tr>
@@ -32,9 +34,11 @@ if (empty($_SESSION['AdminID'])) {
 		require ('includes/constants.php');
 
 		$ProdID = $_GET["ProdID"];
+		$grandsum = 0;
 		
 
-		$q = "SELECT * FROM cust_order WHERE ProdID = '$ProdID'";
+		$q = "SELECT * FROM cust_order WHERE ProdID = '$ProdID' 
+		ORDER BY Order_Date DESC";
 		$r = @mysqli_query ($dbc,$q);
 
 		if (!mysqli_num_rows($r) == 1) {
@@ -61,10 +65,8 @@ if (empty($_SESSION['AdminID'])) {
 				echo '
 				<td align="left">'.$data['Quantity'].'</td>
 				<td align="left">RM'.$sumProd.'</td>';
-			} else {
-				echo '<td align="left" colspan="2"><i>Product No Longer Available</i></td>';
 			}
-			
+			$grandsum += $sumProd;
 			echo '<td>
 				<form action="orderLdetails.php" method="GET">
 					<input type="text" name="Order_Date" value="'.$data["Order_Date"].'" hidden>
@@ -73,6 +75,8 @@ if (empty($_SESSION['AdminID'])) {
 				</form></td>
 			</tr>';
 		}}
+		echo '<td colspan=4 style="text-align:right"><b>GRAND TOTAL INCOME:- <b></td>
+		<td><b>RM'.$grandsum.'</td>';
 		?>
 	</table>
 </div>

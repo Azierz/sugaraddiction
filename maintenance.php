@@ -27,7 +27,7 @@ if (empty($_SESSION['AdminID'])) {
 		<?php
 		require ('includes/constants.php');
 
-		$q = "SELECT * FROM product";
+		$q = "SELECT * FROM product ORDER BY Name ASC";
 		$r = @mysqli_query ($dbc,$q);
 
 		if (!mysqli_num_rows($r) == 1) {

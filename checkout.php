@@ -18,8 +18,8 @@ foreach($_SESSION['cart'] as $cart => $val) {
 			$Order_CustID = $_SESSION['CustID'];
 			$Order_ProdID = $ProdID;
 			$Order_Quantity = $_SESSION['qty'][$val];
-
-			$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$Order_Quantity', NOW() )";
+			
+			$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$Order_Quantity', null, null, NOW() )";
 			$rI = mysqli_query($dbc, $qI);
 		
 		}

@@ -1,17 +1,9 @@
 <?php
-$page_title = 'Order List';
-$page_text = 'Order List';
+$page_title = 'Order History Details';
+$page_text = 'Order History Details';
 include ('includes/header.php');
 require ('includes/constants.php');
 $CustName = $_GET["CustName"];
-
-if (empty($_SESSION['AdminID'])) {
-	echo '
-		<script>
-		window.alert("\nPLEASE LOGIN FIRST!");
-		setTimeout(function(){location.href="login.php"},0);
-		</script>';
-}
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -27,13 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	if (mysqli_affected_rows($dbc) > 0) {
 		echo '<script>
-		window.alert("\nSUCCESS!\nStatus has been updated.");
-		setTimeout(function(){location.href="orders_TotalOrder.php"},0);
+		window.alert("\nSUCCESS!\nStatus has been updated.\nThank you for your purchase with us.");
+		setTimeout(function(){location.href="cust_orders.php"},0);
 		</script>';
 	} else {
 		echo '<script>
 		window.alert("\ERROR!\nStatus cannot not be updated.\nPlease try again later.");
-		setTimeout(function(){location.href="orders_TotalOrder.php"},0);
+		setTimeout(function(){location.href="cust_orders.php"},0);
 		</script>';
 	}
 	
@@ -41,11 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<h1>Order List for <?php echo $CustName ?></h1>
+<h1>Order History Details</h1>
 
 <div class="menu">
 <div class="btn-group" style="float: right; margin:-4.1em 0.5em">
-	<?php echo '<button><a href="'. $_SERVER["HTTP_REFERER"] .'">Back to Order History</a></button>';?>
+	
 	</div>
 	<table border="1">
 		<tr>
@@ -81,8 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$rP = @mysqli_query ($dbc,$qP);
 			$dataP = mysqli_fetch_array($rP);
 
-			
-			
 
 			echo '<tr>';
 			echo "<td>" . date("H:i:s A", strtotime($data['Order_Date'])) . "
@@ -107,27 +97,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			
 			echo'
 		</tr>'; 
-		}} echo'<form action="orderLdetails.php" id=statupd method="POST">
+		}} echo'<form action="cust_orderdetails.php" id=statupd method="POST">
 			<input type="text" name="OrderDate" value="'.$OrderDate.'" hidden>
-			<input type="text" name="OrderID" value="'.$OrderID.'" hidden>
-			
-			<label>' .StatusUpdate($SU).'</label>';
-		
-		// echo '<td colspan=9><input type="submit" name="submit" value="Save Change" /></td>';
+			<input type="text" name="OrderID" value="'.$OrderID.'" hidden>';
+			if ($SU == 'Order Ready for Pickup/Delivery') {
+			echo '<label>' .StatusUpdate($SU).'</label>';
+			} else if (empty($SU)){
+				echo '<td colspan=4><b>Current Order Status:- <b> New Order</td>';
+			} else {
+				echo '<td colspan=4><b>Current Order Status:- <b>'.$SU.'</td>';
+			}
+
 		
 			function StatusUpdate($SU) {
-				$StatusUpdate = array ('Order Received, Pending Verification' => 'Order Received, Pending Verification', 'Order Received, Verified' =>  'Order Received, Verified', 'Order Rejected' =>  'Order Rejected', 'Order In Progress' =>  'Order In Progress', 'Order Ready for Pickup/Delivery' =>  'Order Ready for pickup/delivery', 'Order Complete' =>  'Order Complete',);
+				$StatusUpdate = array ('Confirm Your Order Here' => 'Confirm Your Order Here', 'Order Collected/Retrieved' =>  'Order Collected/Retrieved');
 
 				echo '<td colspan=4><b>Current Order Status:- <b><select name="StatusUpdate" id=statusDropdown form=statupd>';
 				foreach ($StatusUpdate as $key => $value) {	echo "<option value=\"$key\"";
 					if ($SU == $key) {echo " selected";}	echo ">$value</option>\n";}
 				echo '</select></td>';
-				// ======================================================================================
-				// echo '<td colspan=4><select name="StatusUpdate" id=statusDropdown form=statupd>';
-				// foreach ($StatusUpdate as $key => $value) {
-				// 	echo "<option value=\"$key\">$value</option>\n";
-				// }
-				// echo '</select></td>';
 			}
 ?>
 <!-- Include jQuery library -->

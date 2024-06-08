@@ -1,6 +1,6 @@
 <?php
-$page_title = 'Order History';
-$page_text = 'Order History';
+$page_title = 'Product Sold List';
+$page_text = 'Product Sold List';
 include ('includes/header.php');
 
 if (empty($_SESSION['AdminID'])) {
@@ -12,13 +12,11 @@ if (empty($_SESSION['AdminID'])) {
 }
 ?>
 
-<h1>Product Sold</h1>
+<h1>Product Sold List</h1>
 
 <div class="menu">
 <div class="btn-group" style="float: right; margin:-4.1em 0.5em">
-		<button><a href="orders_TotalOrder.php">Order History</a></button>
-		<button><a href="orders_ProductSold.php">Product Sold</a></button>
-    
+
 	</div>
 	<table border="1">
 		<tr>
@@ -29,10 +27,12 @@ if (empty($_SESSION['AdminID'])) {
 		</tr>
 		<?php
 		require ('includes/constants.php');
+		$grandsum = 0;
 
 		$q = "SELECT CustID, ProdID, SUM(Quantity) AS Quantity, Order_Date
 		FROM cust_order 
-		GROUP BY ProdID";
+		GROUP BY ProdID
+		";
 		$r = @mysqli_query ($dbc,$q);
 
 		if (!mysqli_num_rows($r) == 1) {
@@ -64,12 +64,12 @@ if (empty($_SESSION['AdminID'])) {
 					<input type="submit" name="submit" value="More Details" />
 				</form></td>
 			</tr>';
-			} else {
-				echo '<td align="left" colspan="4"><i>Product No Longer Available</i></td>';
 			}
-			
+			$grandsum += $sumProd;
 			
 		}}
+		echo '<td colspan=3 style="text-align:right"><b>GRAND TOTAL INCOME:- <b></td>
+		<td><b>RM'.$grandsum.'</td>';
 		?>
 	</table>
 </div>

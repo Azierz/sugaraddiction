@@ -29,13 +29,14 @@
 
 			<a class="cart" href="cart.php"><i class="fa fa-shopping-cart"></i></a>
 			<li><a href="logout.php">Sign Out</a></li>
-			<li><a href="aboutus.php">About Us</a></li>
+			<li><a href="cust_orders.php">Order History</a></li>
+			<li><a href="faq.php">FAQ</a></li>
 			<li><a href="menu.php">Menu</a></li>
 			<li><a href="index.php">Home</a></li>';
 		} else {
 			echo '
 			<li><a href="login.php">Sign In</a></li>
-			<li><a href="aboutus.php">About Us</a></li>
+			<li><a href="faq.php">FAQ</a></li>
 			<li><a href="index.php">Home</a></li>';
 		}
 		?>

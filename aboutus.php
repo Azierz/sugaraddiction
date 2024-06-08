@@ -1,6 +1,6 @@
 <?php
-$page_title = 'About Us';
-$page_text = 'About Us';
+$page_title = 'About Us / FAQ';
+$page_text = 'About Us / FAQ';
 include ('includes/header2.php');
 ?>
 
