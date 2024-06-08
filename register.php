@@ -29,8 +29,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else { // Register the user in the database...
 
 		// Make the query:
-		$q = "INSERT INTO customer VALUES (0, '$n', SHA1('$p'), '$pn', '$ad', '$e', '')";
+		$q = "INSERT INTO customer VALUES (0, '$n', SHA1('$p'), '$pn', '', '$e', NOW(), '')";
 		$r = mysqli_query ($dbc, $q); // Run the query.
+		
+		// Take Cust ID to insert in Address & Save Address in different table
+		if ($r) {
+			$CID = mysqli_insert_id($dbc);
+			$qA = "INSERT INTO address VALUES (0, '$CID', '$ad')";
+			$rA = mysqli_query ($dbc, $qA); // Run the query.
+
+		}
+
 		if ($r) { // If it ran OK.
 
 			// Print a message:

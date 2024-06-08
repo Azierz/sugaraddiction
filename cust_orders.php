@@ -28,7 +28,7 @@ include ('includes/header2.php');
 		$r = @mysqli_query ($dbc,$q);
 
 		if (!mysqli_num_rows($r) == 1) {
-			echo '<tr><td colspan="4">You have no order history</td></tr>';
+			echo '<tr><td colspan="3">You have no order history</td></tr>';
 		} else {
 		while ($data = mysqli_fetch_array($r)) {
 

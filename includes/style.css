@@ -454,6 +454,12 @@ body {
 	border-left: 3px groove;
 	border-right: 3px groove;
 }
+#hidden_div {
+    display: none;
+}
+#hidediv {
+    display: none;
+}
 /* FOOTER END */
 
 /* Added by Larry Ullman: */

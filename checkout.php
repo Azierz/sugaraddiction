@@ -18,20 +18,18 @@ foreach($_SESSION['cart'] as $cart => $val) {
 			$Order_CustID = $_SESSION['CustID'];
 			$Order_ProdID = $ProdID;
 			$Order_Quantity = $_SESSION['qty'][$val];
+			$newaddress = $_SESSION['newaddress'];
 			
-			$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$Order_Quantity', null, null, NOW() )";
+			$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$newaddress', '$Order_Quantity', null, null, NOW() )";
 			$rI = mysqli_query($dbc, $qI);
 		
 		}
 	}
 }
 if ($rI) {
-	unset($_SESSION['cart1']);
-	unset($_SESSION['cart2']);
-	unset($_SESSION['qty1']);
-	unset($_SESSION['qty2']);
-	unset($_SESSION["cakesize1"]);
-	unset($_SESSION["cakesize2"]);
+	unset($_SESSION['cart']);
+	unset($_SESSION['qty']);
+	unset($_SESSION['newaddress']);
 	echo '<script>
 	window.alert("\ORDER SUCCESS!\nThank you for purchasing with us!");
 	setTimeout(function(){location.href="index.php"},0);

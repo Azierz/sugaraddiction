@@ -43,8 +43,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 						$Order_CustID = $_SESSION['CustID'];
 						$Order_ProdID = $ProdID;
 						$Order_Quantity = $_SESSION['qty'][$val];
+						$newaddress = $_SESSION['newaddress'];
 			
-						$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$Order_Quantity', '$target_file', null, NOW() )";
+						$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$newaddress', '$Order_Quantity', '$target_file', null, NOW() )";
 						$rI = mysqli_query($dbc, $qI);
 					
 					}
@@ -71,6 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if ($rI) {
 		unset($_SESSION['cart']);
 		unset($_SESSION['qty']);
+		unset($_SESSION['newaddress']);
 		echo '<script>
 		window.alert("\ORDER SUCCESS!\nThank you for purchasing with us!");
 		setTimeout(function(){location.href="index.php"},0);
