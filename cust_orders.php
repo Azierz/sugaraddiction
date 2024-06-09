@@ -7,9 +7,6 @@ include ('includes/header2.php');
 <h1>Order History</h1>
 
 <div class="menu">
-<div class="btn-group" style="float: right; margin:-4.1em 0.5em">
-    
-	</div>
 	<table border="1">
 		<tr>
 			<th>Date Ordered</th>

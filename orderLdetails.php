@@ -13,14 +13,11 @@ if (empty($_SESSION['AdminID'])) {
 		</script>';
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	$StatusUpdate = $_POST['StatusUpdate'];
 	$OrderDate = $_POST['OrderDate'];
 	$OrderID = $_POST['OrderID'];
-
-
 
 	$qU = "UPDATE cust_order SET StatusUpdate = '$StatusUpdate' WHERE Order_Date = '$OrderDate' ";
 	$rU = @mysqli_query ($dbc, $qU);
@@ -36,8 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		setTimeout(function(){location.href="orders_TotalOrder.php"},0);
 		</script>';
 	}
-	
-
 }
 ?>
 
@@ -47,6 +42,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <div class="btn-group" style="float: right; margin:-4.1em 0.5em">
 	<?php echo '<button><a href="'. $_SERVER["HTTP_REFERER"] .'">Back to Order History</a></button>';?>
 	</div>
+
+	<?php 
+	$OrderDate = $_GET["Order_Date"];
+		
+	//LATER ASK ACAD ABPUT THIS - HOW TO USE THE DATA FROM DB IN 2 SEPERATE PLACE
+	$q = "SELECT * FROM cust_order WHERE Order_Date = '$OrderDate'";
+	$r = @mysqli_query ($dbc,$q);
+	if (!mysqli_num_rows($r) == 1) {
+		echo '<script>
+		window.alert("\nRedirecting...\nNo order from customer.");
+		setTimeout(function(){location.href="orders_TotalOrder.php"},0);
+		</script>';
+	}
+	$dataPre = mysqli_fetch_array($r);
+	$AddID = $dataPre['AddID'];
+	$c = $dataPre['CustID'];
+	$SU = $dataPre['StatusUpdate'];
+
+	// Retrieve Address from db
+	$qAdd = "SELECT Address FROM address WHERE Address_ID = '$AddID'";
+	$rAdd = @mysqli_query ($dbc,$qAdd);
+	$dataAdd = mysqli_fetch_array($rAdd);
+	if(empty($dataAdd['Address']) || $dataAdd['Address'] == 'COD') {
+		$DeliAdd = 'Self Pickup by Customer';
+	} else {
+		$DeliAdd = $dataAdd['Address'];
+	}
+	// Retrieve customer's details from db
+	$qC = "SELECT * FROM customer WHERE CustID = '$c'";
+	$rC = @mysqli_query ($dbc,$qC);
+	$dataC = mysqli_fetch_array($rC);
+	// Set the delivery method
+	if(empty($dataPre['Receipt'])) {
+		$DeliMeth = 'Self Pickup by Customer';
+	} else {
+		$DeliMeth = 'Delivery to Address Above';
+	}
+	?>
+
+	<table>
+		<tr><th colspan="3">CUSTOMER'S DETAILS</th></tr>
+		<tr><th style="text-align:right">Name:- </th><td colspan="2" style="text-align:left"><?php echo $dataC['CustName'];?></td></tr>
+		<tr><th style="text-align:right">Phone Number:- </th><td colspan="2" style="text-align:left"><?php echo $dataC['PhoneNum'];?></td></tr>
+		<tr><th style="text-align:right">Delivery Address:- </th><td colspan="2" style="text-align:left"><?php echo $DeliAdd?></td></tr>
+		<tr><th style="text-align:right">Delivery Method:- </th><td colspan="2" style="text-align:left"><b><?php echo $DeliMeth ?></b></td></tr>
+		<form action="orderLdetails.php" id=statupd method="POST">
+			
+			<label><?php StatusUpdate($SU)?></label>
+	</table>
 	<table border="1">
 		<tr>
 			<th>Date Ordered</th>
@@ -56,37 +100,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			<th>Receipt</th>
 		</tr>
 		<?php
-		
-
-		$OrderDate = $_GET["Order_Date"];
-		
-
 		$q = "SELECT * FROM cust_order WHERE Order_Date = '$OrderDate'";
 		$r = @mysqli_query ($dbc,$q);
-
-		if (!mysqli_num_rows($r) == 1) {
-			echo '<tr><td colspan="4">No order from customer</td></tr>';
-		} else {
 		while ($data = mysqli_fetch_array($r)) {
-
+		
 			$OrderID = $data['OrderID'];
-			$c = $data['CustID'];
 			$p = $data['ProdID'];
-			$SU = $data['StatusUpdate'];
 
-			$qC = "SELECT * FROM customer WHERE CustID = '$c'";
-			$rC = @mysqli_query ($dbc,$qC);
-			$dataC = mysqli_fetch_array($rC);
 			$qP = "SELECT * FROM product WHERE ProductID = '$p'";
 			$rP = @mysqli_query ($dbc,$qP);
 			$dataP = mysqli_fetch_array($rP);
 
-			
-			
-
 			echo '<tr>';
-			echo "<td>" . date("H:i:s A", strtotime($data['Order_Date'])) . "
-			<br>" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
+			echo "<td>" . date("H:i:sA", strtotime($data['Order_Date'])) . ", 
+			" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
 			if(mysqli_num_rows($rP) == 1) {
 				$sumProd = $dataP['Price']*$data['Quantity'];
 				echo '
@@ -96,38 +123,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				';
 				if(empty($receipt)) {
 				if (!isset($data["Receipt"])) {
-					echo '<td rowspan = 100000>Payment by Cash</td>';
+					echo '<td rowspan = 100000>Payment during Self Pickup</td>';
 					$receipt = 1;
 				} else {
 					echo '<td rowspan = 100000><img src="'.$data["Receipt"].'"/></td>';
 				}$receipt = 1;};
-			} else {
-				echo '<td align="left" colspan="4"><i>Product No Longer Available</i></td>';
-			}
+			} 
+			// else {
+			// 	echo '<td align="left" colspan="4"><i>Product No Longer Available</i></td>';
+			// }
 			
-			echo'
-		</tr>'; 
-		}} echo'<form action="orderLdetails.php" id=statupd method="POST">
+			echo'</tr>
 			<input type="text" name="OrderDate" value="'.$OrderDate.'" hidden>
-			<input type="text" name="OrderID" value="'.$OrderID.'" hidden>
-			
-			<label>' .StatusUpdate($SU).'</label>';
-		
-		// echo '<td colspan=9><input type="submit" name="submit" value="Save Change" /></td>';
-		
-			function StatusUpdate($SU) {
-				$StatusUpdate = array ('Order Received, Pending Verification' => 'Order Received, Pending Verification', 'Order Received, Verified' =>  'Order Received, Verified', 'Order Rejected' =>  'Order Rejected', 'Order In Progress' =>  'Order In Progress', 'Order Ready for Pickup/Delivery' =>  'Order Ready for pickup/delivery', 'Order Complete' =>  'Order Complete',);
+			<input type="text" name="OrderID" value="'.$OrderID.'" hidden>'; 
+		}
 
-				echo '<td colspan=4><b>Current Order Status:- <b><select name="StatusUpdate" id=statusDropdown form=statupd>';
+			// Function to update status/tracker
+			function StatusUpdate($SU) {
+				$StatusUpdate = array ('Order Received, Pending Verification' => 'Order Received, Pending Verification', 'Order Received, Verified' =>  'Order Received, Verified', 'Order Rejected' =>  'Order Rejected', 'Order In Progress' =>  'Order In Progress', 'Order Ready for Pickup/Delivery' =>  'Order Ready for pickup/delivery', 'Order Collected/Retrieved' =>  'Order Collected/Retrieved',);
+
+				echo '<th style="text-align:right">Current Order Status:-</th>
+				<td colspan=2 style="text-align:left"><select name="StatusUpdate" id=statusDropdown form=statupd>';
 				foreach ($StatusUpdate as $key => $value) {	echo "<option value=\"$key\"";
 					if ($SU == $key) {echo " selected";}	echo ">$value</option>\n";}
 				echo '</select></td>';
-				// ======================================================================================
-				// echo '<td colspan=4><select name="StatusUpdate" id=statusDropdown form=statupd>';
-				// foreach ($StatusUpdate as $key => $value) {
-				// 	echo "<option value=\"$key\">$value</option>\n";
-				// }
-				// echo '</select></td>';
 			}
 ?>
 <!-- Include jQuery library -->

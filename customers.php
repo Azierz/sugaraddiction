@@ -26,7 +26,7 @@ if (empty($_SESSION['AdminID'])) {
 		<?php
 		require ('includes/constants.php');
 
-		$q = "SELECT * FROM customer";
+		$q = "SELECT * FROM customer ORDER BY regs_date DESC";
 		$r = @mysqli_query ($dbc,$q);
 
 		if (!mysqli_num_rows($r) == 1) {
@@ -38,9 +38,9 @@ if (empty($_SESSION['AdminID'])) {
 				<td align="left">'.$data['CustName'].'</td>
 				<td align="left">'.$data['Email'].'</td>
 				<td align="left">'.$data['PhoneNum'].'</td>
-				<td align="left">'.$data['Address'].'</td>
-				<td align="left"> 10 May 2024 </td>
-			</tr>';
+				<td align="left">'.$data['Address'].'</td>';
+				echo "<td align='left'>" . date("H:i:s A", strtotime($data['regs_date'])) . "<br>" . date("j M Y", strtotime($data['regs_date'])) . "</td>";
+			echo'</tr>';
 		}}
 		?>
 	</table>

@@ -44,8 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 						$Order_ProdID = $ProdID;
 						$Order_Quantity = $_SESSION['qty'][$val];
 						$newaddress = $_SESSION['newaddress'];
+						$status = 'Order Received, Pending Verification';
 			
-						$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$newaddress', '$Order_Quantity', '$target_file', null, NOW() )";
+						$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$newaddress', '$Order_Quantity', '$target_file', $status, NOW() )";
 						$rI = mysqli_query($dbc, $qI);
 					
 					}

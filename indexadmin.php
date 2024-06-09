@@ -14,8 +14,8 @@ if (empty($_SESSION['AdminID'])) {
 
 <h1>Category</h1>
 
-	<div class="menu">
-		<table>
+	<div class="menu" >
+		<table style="width: 70%;">
 		  <tr>
 		    <th>Product Maintenance</th>
 		    <th>Customer List</th>

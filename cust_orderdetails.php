@@ -36,9 +36,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <h1>Order History Details</h1>
 
 <div class="menu">
-<div class="btn-group" style="float: right; margin:-4.1em 0.5em">
-	
-	</div>
+<?php 
+	$OrderDate = $_GET["Order_Date"];
+		
+	//LATER ASK ACAD ABPUT THIS - HOW TO USE THE DATA FROM DB IN 2 SEPERATE PLACE
+	$q = "SELECT * FROM cust_order WHERE Order_Date = '$OrderDate'";
+	$r = @mysqli_query ($dbc,$q);
+	if (!mysqli_num_rows($r) == 1) {
+		echo '<script>
+		window.alert("\nRedirecting...\nNo order from customer.");
+		setTimeout(function(){location.href="cust_orders.php"},0);
+		</script>';
+	}
+	$dataPre = mysqli_fetch_array($r);
+
+	$AddID = $dataPre['AddID'];
+	$c = $dataPre['CustID'];
+	$SU = $dataPre['StatusUpdate'];
+	$OrderID = $dataPre['OrderID'];
+
+	// Retrieve Address from db
+	$qAdd = "SELECT Address FROM address WHERE Address_ID = '$AddID'";
+	$rAdd = @mysqli_query ($dbc,$qAdd);
+	$dataAdd = mysqli_fetch_array($rAdd);
+	if(empty($dataAdd['Address']) || $dataAdd['Address'] == 'COD') {
+		$DeliAdd = 'Self Pickup by Customer';
+	} else {
+		$DeliAdd = $dataAdd['Address'];
+	}
+	// Retrieve customer's details from db
+	$qC = "SELECT * FROM customer WHERE CustID = '$c'";
+	$rC = @mysqli_query ($dbc,$qC);
+	$dataC = mysqli_fetch_array($rC);
+	// Set the delivery method
+	if(empty($dataPre['Receipt'])) {
+		$DeliMeth = 'Self Pickup by Customer';
+	} else {
+		$DeliMeth = 'Delivery to Address Above';
+	}
+?>
+
+	<table>
+		<tr><th colspan="3">CUSTOMER'S DETAILS</th></tr>
+		<tr><th style="text-align:right">Name:- </th><td colspan="2" style="text-align:left"><?php echo $dataC['CustName'];?></td></tr>
+		<tr><th style="text-align:right">Phone Number:- </th><td colspan="2" style="text-align:left"><?php echo $dataC['PhoneNum'];?></td></tr>
+		<tr><th style="text-align:right">Delivery Address:- </th><td colspan="2" style="text-align:left"><?php echo $DeliAdd?></td></tr>
+		<tr><th style="text-align:right">Delivery Method:- </th><td colspan="2" style="text-align:left"><b><?php echo $DeliMeth ?></b></td></tr>
+		<form action="orderLdetails.php" id=statupd method="POST">
+			<?php 
+			if ($SU == 'Order Ready for Pickup/Delivery') {
+				echo '<label>' .StatusUpdate($SU).'</label>';
+				} else if (empty($SU)){
+					echo '<th style="text-align:right">Current Order Status:-</th>
+					<td colspan=2 style="text-align:left"> Order Received, Pending Verification</td>';
+				} else {
+					echo '<th style="text-align:right">Current Order Status:-</th>
+					<td colspan=2 style="text-align:left">'.$SU.'</td>';
+				}?>
+	</table>
+
 	<table border="1">
 		<tr>
 			<th>Date Ordered</th>
@@ -48,35 +104,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			<th>Receipt</th>
 		</tr>
 		<?php
-		
-
-		$OrderDate = $_GET["Order_Date"];
-		
-
 		$q = "SELECT * FROM cust_order WHERE Order_Date = '$OrderDate'";
 		$r = @mysqli_query ($dbc,$q);
-
-		if (!mysqli_num_rows($r) == 1) {
-			echo '<tr><td colspan="4">No order from customer</td></tr>';
-		} else {
 		while ($data = mysqli_fetch_array($r)) {
-
+			
 			$OrderID = $data['OrderID'];
-			$c = $data['CustID'];
 			$p = $data['ProdID'];
-			$SU = $data['StatusUpdate'];
 
-			$qC = "SELECT * FROM customer WHERE CustID = '$c'";
-			$rC = @mysqli_query ($dbc,$qC);
-			$dataC = mysqli_fetch_array($rC);
 			$qP = "SELECT * FROM product WHERE ProductID = '$p'";
 			$rP = @mysqli_query ($dbc,$qP);
 			$dataP = mysqli_fetch_array($rP);
 
-
 			echo '<tr>';
-			echo "<td>" . date("H:i:s A", strtotime($data['Order_Date'])) . "
-			<br>" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
+			echo "<td>" . date("H:i:sA", strtotime($data['Order_Date'])) . ", 
+			" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
 			if(mysqli_num_rows($rP) == 1) {
 				$sumProd = $dataP['Price']*$data['Quantity'];
 				echo '
@@ -86,29 +127,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				';
 				if(empty($receipt)) {
 				if (!isset($data["Receipt"])) {
-					echo '<td rowspan = 100000>Payment by Cash</td>';
+					echo '<td rowspan = 100000>Payment during Self Pickup</td>';
 					$receipt = 1;
 				} else {
 					echo '<td rowspan = 100000><img src="'.$data["Receipt"].'"/></td>';
 				}$receipt = 1;};
-			} else {
-				echo '<td align="left" colspan="4"><i>Product No Longer Available</i></td>';
-			}
+			} 
+			// else {
+			// 	echo '<td align="left" colspan="4"><i>Product No Longer Available</i></td>';
+			// }
 			
-			echo'
-		</tr>'; 
-		}} echo'<form action="cust_orderdetails.php" id=statupd method="POST">
+			echo'</tr>
 			<input type="text" name="OrderDate" value="'.$OrderDate.'" hidden>
-			<input type="text" name="OrderID" value="'.$OrderID.'" hidden>';
-			if ($SU == 'Order Ready for Pickup/Delivery') {
-			echo '<label>' .StatusUpdate($SU).'</label>';
-			} else if (empty($SU)){
-				echo '<td colspan=4><b>Current Order Status:- <b> New Order</td>';
-			} else {
-				echo '<td colspan=4><b>Current Order Status:- <b>'.$SU.'</td>';
-			}
-
-		
+			<input type="text" name="OrderID" value="'.$OrderID.'" hidden>'; 
+		}
+			// Function to update status/tracker
 			function StatusUpdate($SU) {
 				$StatusUpdate = array ('Confirm Your Order Here' => 'Confirm Your Order Here', 'Order Collected/Retrieved' =>  'Order Collected/Retrieved');
 
@@ -118,6 +151,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				echo '</select></td>';
 			}
 ?>
+	</table>
+</div>
+
 <!-- Include jQuery library -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -132,10 +168,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     });
   });
 </script>
-
-		
-	</table>
-</div>
 
 <?php
 include ('includes/footer.html');

@@ -3,6 +3,15 @@ $page_title = 'Menu Details';
 $page_text = 'Menu Details';
 include ('includes/header.php');
 
+
+if (empty($_SESSION['CustID'])) {
+	echo '
+		<script>
+		window.alert("\nPLEASE LOGIN FIRST!");
+		setTimeout(function(){location.href="login.php"},0);
+		</script>';
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	
 	$CartID = $_POST['cart'];

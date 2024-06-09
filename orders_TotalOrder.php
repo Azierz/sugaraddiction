@@ -15,22 +15,18 @@ if (empty($_SESSION['AdminID'])) {
 <h1>Total Order</h1>
 
 <div class="menu">
-<div class="btn-group" style="float: right; margin:-4.1em 0.5em">
-    
-	</div>
 	<table border="1">
 		<tr>
 			<th>Date Ordered</th>
 			<th>Customer's Name</th>
-			<th>Customer's Phone Number</th>
-			
+			<th>Delivery Method</th>
 			<th>Current Status</th>
 			<th>View Order Details</th>
 		</tr>
 		<?php
 		require ('includes/constants.php');
 
-		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, Quantity, Order_Date
+		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, Quantity, Receipt, StatusUpdate, Order_Date
         FROM cust_order
         GROUP BY CustID, Order_Date
 		ORDER BY Order_Date DESC;";
@@ -51,22 +47,26 @@ if (empty($_SESSION['AdminID'])) {
 			$qP = "SELECT * FROM product WHERE ProductID = '$p'";
 			$rP = @mysqli_query ($dbc,$qP);
 			$dataP = mysqli_fetch_array($rP);
-			$qOD = "SELECT * FROM cust_order WHERE Order_date = '$OD'";
-			$rOD = @mysqli_query ($dbc,$qOD);
-			$dataOD = mysqli_fetch_array($rOD);
 
-			echo "<tr><td>" . date("H:i:s A", strtotime($data['Order_Date'])) . "<br>" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
+			if(empty($data['Receipt'])) {
+				$DeliMeth = 'Self Pickup by Customer';
+			} else {
+				$DeliMeth = 'Delivery to Customer\'s Address';
+			}
+
+			echo "<tr><td>" . date("H:i:sA", strtotime($data['Order_Date'])) . "<br>
+			" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
 			// j M Y - short form for month | j F Y - full name for month
 			// H:i:s A, j M Y - time, date | j M Y, H:i:s A - date, time
 			echo '
 				<td align="left">'.$dataC['CustName'].'</td>
-				<td align="left">'.$dataC['PhoneNum'].'</td>';
+				<td align="left">'.$DeliMeth.'</td>';
 			// if(mysqli_num_rows($rP) == 1) {
-			if (isset($dataOD['StatusUpdate'])) {
+			if (isset($data['StatusUpdate'])) {
 				echo '
-				<td align="left">'.$dataOD['StatusUpdate'].'</td>'; 
+				<td align="left">'.$data['StatusUpdate'].'</td>'; 
 			} else {
-				echo '<td align="left">New Order</td>';
+				echo '<td align="left">Order Received, Pending Verification</td>';
 			}
 				// <td align="left">'.$data['Quantity'].'</td>';
 			// } else {

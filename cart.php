@@ -42,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		</tr>
 		<?php
 		
-
 		if (empty($_SESSION["cart"])) {
 			echo '
 				<script>
@@ -121,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	<table>
 		<tr>
 			<th style="text-align: left; border: 0px">TOTAL PAYMENT</th>
-			<th style="text-align: left; border: 0px">PAYMENT METHOD</th>
+			<th style="text-align: left; border: 0px">DELIVERY & PAYMENT METHOD</th>
 		</tr>
 		<tr>
 			<td style="text-align: left">RM<?php echo $TotalPayment; ?></td>
@@ -143,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	function showDiv(divId, element) {
     document.getElementById(divId).style.display = element.value == "addaddress" ? 'block' : 'none';
-}
+	}
 
 </script>
 		
@@ -160,6 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					echo "<option value=\"$value[Address_ID]\">$value[Address]</option>\n";
 				}
 			
+			echo "<option value=\"COD\">Self Pickup [Payment during Pickup]</option>\n";
 			echo "<option value=\"addaddress\">[+] Add New Address</option>\n";
 			echo '</select>';
 		} else {
@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 
 	function pmethod() {
-		$Pmethod = array ('Online' => 'Delivery - Online Payment', 'COD' =>  'Self Pickup - Cash On Delivery',);
+		$Pmethod = array ('Online' => 'Delivery - Online Payment', 'COD' =>  'Self Pickup - Payment during Pickup',);
 
 		echo '<select name="Pmethod">';
 		foreach ($Pmethod as $key => $value) {

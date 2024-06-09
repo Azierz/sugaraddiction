@@ -27,7 +27,7 @@ if (empty($_SESSION['AdminID'])) {
 			<th>Customer's Name</th>
 			<th>Quantity</th>
 			<th>Total Income</th>
-			<th>View Order</th>
+			<!-- <th>View Order</th> -->
 			
 		</tr>
 		<?php
@@ -36,8 +36,9 @@ if (empty($_SESSION['AdminID'])) {
 		$ProdID = $_GET["ProdID"];
 		$grandsum = 0;
 		
-
-		$q = "SELECT * FROM cust_order WHERE ProdID = '$ProdID' 
+		$q = "SELECT *, MONTHNAME(Order_Date) AS 'Month', YEAR(Order_Date) AS 'Year' 
+		FROM cust_order 
+		WHERE ProdID = '$ProdID' AND MONTH(Order_Date)
 		ORDER BY Order_Date DESC";
 		$r = @mysqli_query ($dbc,$q);
 
@@ -58,7 +59,8 @@ if (empty($_SESSION['AdminID'])) {
 			
 			$sumProd = $dataP['Price']*$data['Quantity'];
 
-			echo "<tr><td>" . date("H:i:s A", strtotime($data['Order_Date'])) . "<br>" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
+			echo "<tr><td>" . date("H:i:sA", strtotime($data['Order_Date'])) . "
+			<br>" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
 			echo '
 				<td align="left">'.$dataC['CustName'].'</td>';
 			if(mysqli_num_rows($rP) == 1) {
@@ -67,18 +69,21 @@ if (empty($_SESSION['AdminID'])) {
 				<td align="left">RM'.$sumProd.'</td>';
 			}
 			$grandsum += $sumProd;
-			echo '<td>
-				<form action="orderLdetails.php" method="GET">
-					<input type="text" name="Order_Date" value="'.$data["Order_Date"].'" hidden>
-					<input type="text" name="CustName" value="'.$dataC["CustName"].'" hidden>
-					<input type="submit" name="submit" value="View Order" />
-				</form></td>
-			</tr>';
+			// echo '<td>
+			// 	<form action="orderLdetails.php" method="GET">
+			// 		<input type="text" name="Order_Date" value="'.$data["Order_Date"].'" hidden>
+			// 		<input type="text" name="CustName" value="'.$dataC["CustName"].'" hidden>
+			// 		<input type="submit" name="submit" value="View Order" />
+			// 	</form></td>';
+			echo '</tr>';
 		}}
-		echo '<td colspan=4 style="text-align:right"><b>GRAND TOTAL INCOME:- <b></td>
+		echo '<td colspan=3 style="text-align:right"><b>GRAND TOTAL INCOME:- <b></td>
 		<td><b>RM'.$grandsum.'</td>';
 		?>
 	</table>
+
+	<h1>Product List for <?php echo $ProdName ?></h1>
+
 </div>
 <?php
 include ('includes/footer.html');
