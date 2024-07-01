@@ -454,8 +454,8 @@ body {
 	border-left: 3px groove;
 	border-right: 3px groove;
 }
-#hidden_div {
-    display: none;
+#showdiv {
+    display: block;
 }
 #hidediv {
     display: none;

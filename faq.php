@@ -26,7 +26,14 @@ include ('includes/header2.php');
 			<th style="text-align: left;">What is the delivery rate for the area(s) you mentioned above?</th>
 		</tr><tr>
 			<td style="text-align: left;">Delivery Rate is fixed at <b>RM5</b>. <br>However, <b>orders above RM100</b> will receive free delivery.</td>
+		</tr><tr>
+			<th style="text-align: left;">What will happen to the order that is not picked up by selected date?</th>
+		</tr><tr>
+			<td style="text-align: left;">Those orders will be kept and customers are required to come and collect the order <b>within 24 hours</b> after the selected date.
+				If customer fails to come and collect, the order will be <b>automatically be voided and non-refundable</b>. <br>This is to ensure the quality of the cake is preserved.
+			</td>
 		</tr>
+		
 	</table>
 </div>
 

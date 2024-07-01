@@ -20,8 +20,16 @@ foreach($_SESSION['cart'] as $cart => $val) {
 			$Order_Quantity = $_SESSION['qty'][$val];
 			$newaddress = $_SESSION['newaddress'];
 			$status = 'Order Received, Pending Verification';
+			$datepd = $_SESSION['datepd'];
+			// if sms is empty
+			if(empty($_SESSION['sms'][$val])) {
+				$Sms = "No Message";
+			} else {
+				$Sms = $_SESSION['sms'][$val];
+			}
 			
-			$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$newaddress', '$Order_Quantity', null, $status, NOW() )";
+			
+			$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$newaddress', '$Order_Quantity', '$Sms', '$datepd', null, $status, null, NOW() )";
 			$rI = mysqli_query($dbc, $qI);
 		
 		}

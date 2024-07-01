@@ -99,10 +99,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						</tr>
 						<tr>
 							<td colspan="2">Quantity:<br><br><input type="number" name="qty" size=5 value="1" min=1 max=999></td>
-						</tr>
-						<tr>
-							<td colspan="2">Personalized Message (Optional):<br><br><textarea name="sms" rows="4" cols="30"></textarea></td>
-						</tr>
+						</tr>';
+						// if ProductID = 1 or 4 or 12 or 13 or 13
+						if ($data["ProductID"] == 1 || $data["ProductID"] == 12 || 
+						$data["ProductID"] == 13 || $data["ProductID"] == 14) {
+							echo '
+							<tr>
+								<td colspan="2">Personalized Message (Optional):<br><br><textarea name="sms" rows="4" cols="30"></textarea></td>
+							</tr>';
+						}
+							
+						echo'
 						<tr>
 							<input type="text" name="cart" value="'.$data["ProductID"].'" hidden>
 							<td colspan="2"><input type="submit" name="submit" value="Add To Cart" /></td>

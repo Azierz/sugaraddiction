@@ -120,22 +120,6 @@ if (empty($_SESSION['AdminID'])) {
 
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Add this script after your dropdown menu -->
-<script>
-  $(document).ready(function() {
-    // Assuming your dropdown menu has an ID of "statusDropdown"
-    $('#statusDropdown').on('change', function() {
-      const selectedStatus = $(this).val(); // Get the selected value
-      // Programmatically submit the form
-      $('#statupd').submit(); // Replace with your actual form ID
-    });
-  });
-</script>
-
-
-
 <?php
 	// Function to update status/tracker
 	function MonthFilter($dbc, $M) {

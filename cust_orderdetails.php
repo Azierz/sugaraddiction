@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		</script>';
 	}
 	
-
 }
 ?>
 
@@ -54,12 +53,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$c = $dataPre['CustID'];
 	$SU = $dataPre['StatusUpdate'];
 	$OrderID = $dataPre['OrderID'];
+	$datepd = $dataPre['datepd'];
 
 	// Retrieve Address from db
 	$qAdd = "SELECT Address FROM address WHERE Address_ID = '$AddID'";
 	$rAdd = @mysqli_query ($dbc,$qAdd);
 	$dataAdd = mysqli_fetch_array($rAdd);
-	if(empty($dataAdd['Address']) || $dataAdd['Address'] == 'COD') {
+	if(empty($dataAdd['Address']) || $dataPre['AddID'] == 0) {
 		$DeliAdd = 'Self Pickup by Customer';
 	} else {
 		$DeliAdd = $dataAdd['Address'];
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$rC = @mysqli_query ($dbc,$qC);
 	$dataC = mysqli_fetch_array($rC);
 	// Set the delivery method
-	if(empty($dataPre['Receipt'])) {
+	if($dataPre['AddID'] == 0) {
 		$DeliMeth = 'Self Pickup by Customer';
 	} else {
 		$DeliMeth = 'Delivery to Address Above';
@@ -77,11 +77,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 	<table>
-		<tr><th colspan="3">CUSTOMER'S DETAILS</th></tr>
-		<tr><th style="text-align:right">Name:- </th><td colspan="2" style="text-align:left"><?php echo $dataC['CustName'];?></td></tr>
+		<tr><th colspan="3">ORDER DETAILS</th>
+		<th>ORDER RECEIPT</th></tr>
+		<tr><th style="text-align:right">Name:- </th><td colspan="2" style="text-align:left"><?php echo $dataC['CustName'];?></td>
+		<?php if(empty($receipt)) {
+			echo '<td rowspan = 6><img src="'.$dataPre["Receipt"].'"/></td>';
+			$receipt = 1;
+		}
+			?>
+			</tr>
 		<tr><th style="text-align:right">Phone Number:- </th><td colspan="2" style="text-align:left"><?php echo $dataC['PhoneNum'];?></td></tr>
-		<tr><th style="text-align:right">Delivery Address:- </th><td colspan="2" style="text-align:left"><?php echo $DeliAdd?></td></tr>
-		<tr><th style="text-align:right">Delivery Method:- </th><td colspan="2" style="text-align:left"><b><?php echo $DeliMeth ?></b></td></tr>
+
+		<?php if($dataPre['AddID'] != 0) { ?>
+			<tr><th style="text-align:right">Delivery Address:- </th><td colspan="2" style="text-align:left"><?php echo $DeliAdd?></td></tr>
+			<tr><th style="text-align:right">Delivery Method:- </th><td colspan="2" style="text-align:left"><b><?php echo $DeliMeth ?></b></td></tr>
+		<?php } else { ?>
+			<tr><th style="text-align:right">Delivery Method:- </th><td colspan="2" style="text-align:left"><b><?php echo $DeliMeth ?></b></td></tr>
+		<?php } ?>
+		
+		<tr><th style="text-align:right">Selected Pickup / Delivery Date:- </th><td colspan="2" style="text-align:left"><b><?php echo date("j M Y", strtotime($datepd)) ?></b></td></tr>
 		<form action="orderLdetails.php" id=statupd method="POST">
 			<?php 
 			if ($SU == 'Order Ready for Pickup/Delivery') {
@@ -99,9 +113,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		<tr>
 			<th>Date Ordered</th>
 			<th>Product(s)</th>
+			<th>Personalized Message</th>
 			<th>Quantity</th>
 			<th>Total Price</th>
-			<th>Receipt</th>
 		</tr>
 		<?php
 		$q = "SELECT * FROM cust_order WHERE Order_Date = '$OrderDate'";
@@ -122,16 +136,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$sumProd = $dataP['Price']*$data['Quantity'];
 				echo '
 				<td align="left">'.$dataP['Name'].'</td>
+				<td align="left">'.$data['pmessage'].'</td>
 				<td align="left">'.$data['Quantity'].'</td>
 				<td align="left">RM'.$sumProd.'</td>
 				';
-				if(empty($receipt)) {
-				if (!isset($data["Receipt"])) {
-					echo '<td rowspan = 100000>Payment during Self Pickup</td>';
-					$receipt = 1;
-				} else {
-					echo '<td rowspan = 100000><img src="'.$data["Receipt"].'"/></td>';
-				}$receipt = 1;};
 			} 
 			// else {
 			// 	echo '<td align="left" colspan="4"><i>Product No Longer Available</i></td>';

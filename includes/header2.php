@@ -33,6 +33,8 @@
 			<li><a href="faq.php">FAQ</a></li>
 			<li><a href="menu.php">Menu</a></li>
 			<li><a href="index.php">Home</a></li>';
+		} elseif (!empty($_SESSION['AdminID'])) {
+				echo '<li><a href="customers.php">Back</a></li>';
 		} else {
 			echo '
 			<li><a href="login.php">Sign In</a></li>

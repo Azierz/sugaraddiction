@@ -2,6 +2,7 @@
 $page_title = 'Order History';
 $page_text = 'Order History';
 include ('includes/header.php');
+require ('includes/constants.php');
 
 if (empty($_SESSION['AdminID'])) {
 	echo '
@@ -10,11 +11,74 @@ if (empty($_SESSION['AdminID'])) {
 		setTimeout(function(){location.href="login.php"},0);
 		</script>';
 }
+$sd=0;
+
+	if ((!isset($_POST['delivery'])) && (!isset($_POST['status'])) || ($_POST['delivery'] == 2) && ($_POST['status'] == 2)) {
+		$D = 2;
+		$S = 2;
+		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
+        FROM cust_order
+        GROUP BY CustID, Order_Date
+		ORDER BY Order_Date DESC
+		";
+	} else if (($_POST['delivery'] != 2) && ($_POST['status'] != 2)) {
+		$D = $_POST['delivery'];
+		$S= $_POST['status'];
+		if ($D == 0) {
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
+			FROM cust_order
+			WHERE StatusUpdate = '$S' AND AddID = 0
+			GROUP BY CustID, Order_Date
+			ORDER BY Order_Date DESC"; 
+		} else {
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
+			FROM cust_order
+			WHERE NOT AddID = 0 AND StatusUpdate = '$S'
+			GROUP BY CustID, Order_Date
+			ORDER BY Order_Date DESC";
+		};
+	} else if (($_POST['delivery'] == 2) && ($_POST['status'] != 2)) {
+		$D = 2;
+		$S= $_POST['status'];
+		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
+        FROM cust_order
+		WHERE StatusUpdate = '$S'
+        GROUP BY CustID, Order_Date
+		ORDER BY Order_Date DESC
+		";
+	} else if (($_POST['delivery'] != 2) && ($_POST['status'] == 2)) {
+		$D = $_POST['delivery'];
+		$S = 2;
+		if ($D == 0) {
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
+			FROM cust_order
+			WHERE AddID = 0
+			GROUP BY CustID, Order_Date
+			ORDER BY Order_Date DESC"; 
+		} else {
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
+			FROM cust_order
+			WHERE NOT AddID = 0
+			GROUP BY CustID, Order_Date
+			ORDER BY Order_Date DESC";
+		};
+	}
+
 ?>
+
 
 <h1>Total Order</h1>
 
 <div class="menu">
+<div class="btn-group" style="float: right; margin: 0.5em">
+	<form action="orders_TotalOrder.php" id=filter method="POST">
+	<label><?php sDate($dbc, $sd);?></label>
+	<label><?php delivery($D);?></label>
+	<label><?php status($S);?></label>
+	<input type="button" onclick="location.href='orders_TotalOrder.php'" value="Clear Filter"/>
+	<input type="submit" name="submit" value="Apply Filter"/>
+	</form>
+	</div>
 	<table border="1">
 		<tr>
 			<th>Date Ordered</th>
@@ -24,16 +88,14 @@ if (empty($_SESSION['AdminID'])) {
 			<th>View Order Details</th>
 		</tr>
 		<?php
-		require ('includes/constants.php');
-
-		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, Quantity, Receipt, StatusUpdate, Order_Date
-        FROM cust_order
-        GROUP BY CustID, Order_Date
-		ORDER BY Order_Date DESC;";
 		$r = @mysqli_query ($dbc,$q);
+		// to check what error occurs in query
+		// if (!$r) {
+		// 	die("Query failed: " . mysqli_error($dbc));
+		// }
 
 		if (!mysqli_num_rows($r) == 1) {
-			echo '<tr><td colspan="4">No order from customer</td></tr>';
+			echo '<tr><td colspan="5">No order from customer</td></tr>';
 		} else {
 		while ($data = mysqli_fetch_array($r)) {
 
@@ -48,7 +110,7 @@ if (empty($_SESSION['AdminID'])) {
 			$rP = @mysqli_query ($dbc,$qP);
 			$dataP = mysqli_fetch_array($rP);
 
-			if(empty($data['Receipt'])) {
+			if(empty($data['AddID']) || $data['AddID'] == 0) {
 				$DeliMeth = 'Self Pickup by Customer';
 			} else {
 				$DeliMeth = 'Delivery to Customer\'s Address';
@@ -89,6 +151,57 @@ if (empty($_SESSION['AdminID'])) {
 	</table>
 </div>
 
+
 <?php
+	// Function to update status/tracker
+	function delivery($D) {
+
+		$delivery = array ('2' => 'No Delivery Method Filter', '0' =>  'Self Pickup', '1' => 'Delivery');
+
+			echo '<select name="delivery" form=filter>';
+				foreach ($delivery as $key => $value) {
+					echo "<option value=\"$key\""; 
+					if ($D ==  $key) {echo " selected";} 
+					echo ">$value</option>\n";
+				}
+			echo '</select>';
+	}
+
+	function status($S) {
+
+		$status = array ('2' => 'No Current Status Filter', 'Order Received, Pending Verification' => 'Order Received, Pending Verification', 'Order Received, Verified' =>  'Order Received, Verified', 'Order Rejected' =>  'Order Rejected', 'Order In Progress' =>  'Order In Progress', 'Order Ready for Pickup/Delivery' =>  'Order Ready for pickup/delivery', 'Order Collected/Retrieved' =>  'Order Collected/Retrieved');
+
+			echo '<select name="status" form=filter>';
+				foreach ($status as $key => $value) {
+					echo "<option value=\"$key\""; 
+					if ($S ==  $key) {echo " selected";} 
+					echo ">$value</option>\n";
+				}
+			echo '</select>';
+	}
+
+	function sDate($dbc, $sd) {
+		$q = "SELECT datepd
+		FROM cust_order 
+		GROUP BY datepd DESC
+		";
+		$r = @mysqli_query ($dbc,$q);
+
+		if ($r) {
+			echo '<select name="sDate" form=filter>';
+			echo "<option value=\"0\">No Date Filter</option>\n";
+				foreach ($r as $value) {
+					echo "<option value=\"$value[datepd]\"";
+					if ($sd ==  $value['datepd']) {echo " selected";}	echo ">$value[datepd]</option>\n";
+				}
+			echo '</select>';
+		} else {
+			// Handle error
+			echo 'Error fetching filter(s).';
+		}
+	}
+
+
 include ('includes/footer.html');
+
 ?>

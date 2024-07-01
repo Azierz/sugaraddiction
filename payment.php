@@ -45,8 +45,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 						$Order_Quantity = $_SESSION['qty'][$val];
 						$newaddress = $_SESSION['newaddress'];
 						$status = 'Order Received, Pending Verification';
+						$datepd = $_SESSION['datepd'];
+						// if sms is empty
+						if(empty($_SESSION['sms'][$val])) {
+							$Sms = "No Message";
+						} else {
+							$Sms = $_SESSION['sms'][$val];
+						}
 			
-						$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$newaddress', '$Order_Quantity', '$target_file', $status, NOW() )";
+						$qI = "INSERT INTO cust_order VALUES (0, '$Order_CustID', '$Order_ProdID', '$newaddress', '$Order_Quantity', '$Sms', '$datepd', '$target_file', '$status', null, NOW() )";
 						$rI = mysqli_query($dbc, $qI);
 					
 					}
@@ -154,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		<?php
 		require ('includes/constants.php');
 		$TotalPayment = 0;
-		if(!empty($_SESSION["cart"][1])){
+		if(!empty($_SESSION["cart"])){
 		foreach($_SESSION['cart'] as $cart => $val) {
 			$ProdID = $val;
 			$Qty = $_SESSION['qty'][$val];
@@ -180,6 +187,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$TotalPayment += 5; //Adding shipping fee to total payment
 		echo '<p>Delivery Charge <span class="price">RM5.00</span></p>';
 			
+		} else {
+			echo '<p>Delivery Charge <span class="price">Free</span></p>';
 		}
 		echo'
 		<hr><p>Total <span class="price" style="color:black"><b>RM'.$TotalPayment.'</b></span></p>';

@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$n = trim($_POST['name']);
 	$p = trim($_POST['pass1']);
 	$pn = trim($_POST['phone_no']);
+	$dob = trim($_POST['dob']);
 	$ad = trim($_POST['address']);
 	$e = trim($_POST['email']);
 
@@ -29,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else { // Register the user in the database...
 
 		// Make the query:
-		$q = "INSERT INTO customer VALUES (0, '$n', SHA1('$p'), '$pn', '', '$e', NOW(), '')";
+		$q = "INSERT INTO customer VALUES (0, '$n', SHA1('$p'), '$pn', '$dob', '', '$e', NOW(), '')";
 		$r = mysqli_query ($dbc, $q); // Run the query.
 		
 		// Take Cust ID to insert in Address & Save Address in different table
@@ -92,6 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		<tr>
 			<td>Phone Number:</td>
 			<td><input type="text" name="phone_no" size="20" maxlength="40" value= "<?php if (isset($_POST['phone_no'])) echo $_POST['phone_no']; ?>" required /></td>
+		</tr>
+		<tr>
+			<td>Date of Birth:</td>
+			<td><input type="date" id="dob" name="dob" value="<?php if (isset($_POST['dob'])) echo $_POST['dob']; ?>" required /></td>
 		</tr>
 		<tr>
 			<td>Address:</td>

@@ -7,23 +7,31 @@ require ('includes/constants.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	if ($_POST['newaddress'] != "") {
+		if ($_POST['newaddress'] != "COD") {
 		$CID = $_SESSION['CustID'];
 		$ad = $_POST['newaddress'];
 		
 		$qA = "INSERT INTO address VALUES (0, '$CID', '$ad')";
 		$rA = mysqli_query ($dbc, $qA); // Run the query.
 		$_SESSION['newaddress'] = mysqli_insert_id($dbc);
+		} else {
+			$_SESSION['newaddress'] = "COD";
+		}
 	} else {
 		$_SESSION['newaddress'] = $_POST['CustAdd'];
 		
 	}
-	
-	if($_POST['Pmethod'] == 'Online') {
-		$_SESSION['method'] = 1;
-		header("Location:payment.php");
+
+	// if selected date is less than 4 days ahed from today or empty, send an error message
+	if ($_POST['datepd'] < date('Y-m-d', strtotime('+4 days'))) {
+		echo '
+				<script>
+				window.alert("\nPlease select a date that is at least 4 days from today.");
+				setTimeout(function(){location.href="cart.php"},0);
+				</script>';
 	} else {
-		$_SESSION['method'] = 0;
-		header("Location:checkout.php");
+		$_SESSION['datepd'] = $_POST['datepd'];
+		header("Location:payment.php");
 	}
 }
 ?>
@@ -56,7 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			
 			$ProdID = $val;
 			$Qty = $_SESSION['qty'][$val];
-			$Sms = $_SESSION["sms"][$val];
+			// if sms is empty
+			if(empty($_SESSION['sms'][$val])) {
+				$Sms = "No Message";
+			} else {
+				$Sms = $_SESSION['sms'][$val];
+			}
 
 			$q = "SELECT * FROM product WHERE ProductID='$ProdID'";
 			$r = @mysqli_query ($dbc,$q);
@@ -85,11 +98,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<td rowspan='2'>";
 					$dt = $data["ProductID"];
 					// TO BE CONFIRMED LATER HOW TO EDIT CART AFTER ADD TO CART
+					// echo '
+					// <form action="menudetails.php" method="GET">
+					// 	<input type="text" name="ProductID" value="'.$data["ProductID"].'" hidden>
+					// 	<input type="submit" name="submit" value="More Details" />
+					// </form>';
 					echo '
-					<form action="menudetails.php" method="GET">
-						<input type="text" name="ProductID" value="'.$data["ProductID"].'" hidden>
-						<input type="submit" name="submit" value="More Details" />
-					</form>';
+					<div class="btn-group">
+						<button><a href="edit_productCart.php?id='.$data['ProductID'].'">EDIT</a></button><br><br>
+						<button><a href="delete_product.php?id='.$data['ProductID'].'">DELETE</a></button>
+					</div>';
+					
+					
 					echo "</td>
 				</tr>
 				<tr>
@@ -112,7 +132,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			<td style="text-align: left"><label><?php address($_SESSION['CustID'], $dbc); ?></td>
 		</tr>
 		<tr>
-			
 			<td id='hidediv'><b>Add New Address:-</b> <br><textarea name=newaddress cols="100" rows="5"></textarea></td>
 		</tr>
 	</table>
@@ -120,12 +139,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	<table>
 		<tr>
 			<th style="text-align: left; border: 0px">TOTAL PAYMENT</th>
-			<th style="text-align: left; border: 0px">DELIVERY & PAYMENT METHOD</th>
+			
+			<th style="text-align: left; border: 0px" colspan="2">SELECT PICKUP/DELIVERY DATE</th>
+			<th style="text-align: left; border: 0px" colspan="2">PAYMENT METHOD</th>
 		</tr>
 		<tr>
-			<td style="text-align: left">RM<?php echo $TotalPayment; ?></td>
-			<td style="text-align: left"><label><?php pmethod(); ?>
-			<br><b>DELIVERY CHARGE: RM5.00<br><br>
+			<td style="text-align: left"><b>RM<?php echo $TotalPayment; ?></b></td>
+			<td style="text-align: left" colspan="2"><input type="date" id="datepd" name="datepd" required>
+			<label for="datepd"><br><br><b>NOTE: The selected date should be in the future, 4 days ahead from today</b></label>
+			</td>
+			<td style="text-align: left" colspan="2"><label><b><u>ONLINE PAYMENT ONLY</u>
+			<br>Delivery Charge: RM5.00<br><br>
 				NOTE: Order above RM100 will get free delivery</b></label></td>
 		</tr>
 	</table>
@@ -154,13 +178,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		if ($rAA) {
 			echo '<select name="CustAdd" onchange="showDiv(\'hidediv\', this)">';
-
+			echo "<option value=\"COD\">Self Pickup [pickup at our store]</option>\n";
+			echo "<option value=\"addaddress\">[+] Add New Address</option>\n";
 				foreach ($rAA as $value) {
 					echo "<option value=\"$value[Address_ID]\">$value[Address]</option>\n";
 				}
 			
-			echo "<option value=\"COD\">Self Pickup [Payment during Pickup]</option>\n";
-			echo "<option value=\"addaddress\">[+] Add New Address</option>\n";
+			
 			echo '</select>';
 		} else {
 			// Handle error

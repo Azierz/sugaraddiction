@@ -82,8 +82,6 @@ if (empty($_SESSION['AdminID'])) {
 		?>
 	</table>
 
-	<h1>Product List for <?php echo $ProdName ?></h1>
-
 </div>
 <?php
 include ('includes/footer.html');
