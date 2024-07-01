@@ -96,10 +96,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						</tr>
 						<tr>
 							<td colspan="2">Price: RM '.$data["Price"].'</td>
-						</tr>
-						<tr>
-							<td colspan="2">Quantity:<br><br><input type="number" name="qty" size=5 value="1" min=1 max=999></td>
 						</tr>';
+						// if productid = 4, set minimum quantity at least 20
+						if ($data["ProductID"] == 4) {
+							echo '<tr>
+							<td colspan="2">Minimum: 20 pcs (RM70)<br>Quantity:<br><br><input type="number" name="qty" size=5 value="20" min=20 max=999></td>
+							</tr>';
+						} else {
+							echo '<tr>
+							<td colspan="2">Quantity:<br><br><input type="number" name="qty" size=5 value="1" min=1 max=999></td>
+							</tr>';
+						}
 						// if ProductID = 1 or 4 or 12 or 13 or 13
 						if ($data["ProductID"] == 1 || $data["ProductID"] == 12 || 
 						$data["ProductID"] == 13 || $data["ProductID"] == 14) {

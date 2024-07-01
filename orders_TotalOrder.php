@@ -11,59 +11,125 @@ if (empty($_SESSION['AdminID'])) {
 		setTimeout(function(){location.href="login.php"},0);
 		</script>';
 }
-$sd=0;
 
-	if ((!isset($_POST['delivery'])) && (!isset($_POST['status'])) || ($_POST['delivery'] == 2) && ($_POST['status'] == 2)) {
+	// 1) d-nf, s-nf, sd-nf
+	if ((!isset($_POST['delivery'])) && (!isset($_POST['status'])) && (!isset($_POST['sDate'])) || 
+	($_POST['delivery'] == 2) && ($_POST['status'] == 2) && ($_POST['sDate'] == 2)) {
 		$D = 2;
 		$S = 2;
-		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
+		$sd = 2;
+		
+		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
         FROM cust_order
         GROUP BY CustID, Order_Date
 		ORDER BY Order_Date DESC
 		";
-	} else if (($_POST['delivery'] != 2) && ($_POST['status'] != 2)) {
-		$D = $_POST['delivery'];
-		$S= $_POST['status'];
-		if ($D == 0) {
-			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
-			FROM cust_order
-			WHERE StatusUpdate = '$S' AND AddID = 0
-			GROUP BY CustID, Order_Date
-			ORDER BY Order_Date DESC"; 
-		} else {
-			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
-			FROM cust_order
-			WHERE NOT AddID = 0 AND StatusUpdate = '$S'
-			GROUP BY CustID, Order_Date
-			ORDER BY Order_Date DESC";
-		};
-	} else if (($_POST['delivery'] == 2) && ($_POST['status'] != 2)) {
+	// 2) d-nf, s-nf, sd-f
+	} else if (($_POST['delivery'] == 2) && ($_POST['status'] == 2) && ($_POST['sDate'] != 2)) {
 		$D = 2;
-		$S= $_POST['status'];
-		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
+		$S = 2;
+		$sd = $_POST['sDate'];
+		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
+        FROM cust_order
+		WHERE datepd = '$sd'
+        GROUP BY CustID, Order_Date
+		ORDER BY Order_Date DESC
+		";
+	// 3) d-nf, s-f, sd-nf
+	} else if (($_POST['delivery'] == 2) && ($_POST['status'] != 2) && ($_POST['sDate'] == 2)) {
+		$D = 2;
+		$S = $_POST['status'];
+		$sd = 2;
+		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
         FROM cust_order
 		WHERE StatusUpdate = '$S'
         GROUP BY CustID, Order_Date
 		ORDER BY Order_Date DESC
 		";
-	} else if (($_POST['delivery'] != 2) && ($_POST['status'] == 2)) {
+	// 4) d-f, s-nf, sd-nf
+	} else if (($_POST['delivery'] != 2) && ($_POST['status'] == 2) && ($_POST['sDate'] == 2)) {
 		$D = $_POST['delivery'];
 		$S = 2;
+		$sd = 2;
 		if ($D == 0) {
-			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
 			FROM cust_order
 			WHERE AddID = 0
 			GROUP BY CustID, Order_Date
 			ORDER BY Order_Date DESC"; 
 		} else {
-			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, StatusUpdate, Order_Date
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
 			FROM cust_order
 			WHERE NOT AddID = 0
 			GROUP BY CustID, Order_Date
 			ORDER BY Order_Date DESC";
 		};
+	// 5) d-nf, s-f, sd-f
+	} else if (($_POST['delivery'] == 2) && ($_POST['status'] != 2) && ($_POST['sDate'] != 2)) {
+		$D = 2;
+		$S = $_POST['status'];
+		$sd = $_POST['sDate'];
+		$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
+        FROM cust_order
+		WHERE StatusUpdate = '$S' AND datepd = '$sd'
+        GROUP BY CustID, Order_Date
+		ORDER BY Order_Date DESC
+		";
+	// 6) d-f, s-nf, sd-f
+	} else if (($_POST['delivery'] != 2) && ($_POST['status'] == 2) && ($_POST['sDate'] != 2)) {
+		$D = $_POST['delivery'];
+		$S = 2;
+		$sd = $_POST['sDate'];
+		if ($D == 0) {
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
+			FROM cust_order
+			WHERE AddID = 0 AND datepd = '$sd'
+			GROUP BY CustID, Order_Date
+			ORDER BY Order_Date DESC"; 
+		} else {
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
+			FROM cust_order
+			WHERE NOT AddID = 0 AND datepd = '$sd'
+			GROUP BY CustID, Order_Date
+			ORDER BY Order_Date DESC";
+		};
+	// 7) d-f, s-f, sd-nf
+	} else if (($_POST['delivery'] != 2) && ($_POST['status'] != 2) && ($_POST['sDate'] == 2)) {
+		$D = $_POST['delivery'];
+		$S = $_POST['status'];
+		$sd = 2;
+		if ($D == 0) {
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
+			FROM cust_order
+			WHERE AddID = 0 AND StatusUpdate = '$S'
+			GROUP BY CustID, Order_Date
+			ORDER BY Order_Date DESC"; 
+		} else {
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
+			FROM cust_order
+			WHERE NOT AddID = 0 AND StatusUpdate = '$S'
+			GROUP BY CustID, Order_Date
+			ORDER BY Order_Date DESC";
+		};
+	// 8) d-f, s-f, sd-f
+	} else if (($_POST['delivery'] != 2) && ($_POST['status'] != 2) && ($_POST['sDate'] != 2)) {
+		$D = $_POST['delivery'];
+		$S = $_POST['status'];
+		$sd = $_POST['sDate'];
+		if ($D == 0) {
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
+			FROM cust_order
+			WHERE AddID = 0 AND StatusUpdate = '$S' AND datepd = '$sd'
+			GROUP BY CustID, Order_Date
+			ORDER BY Order_Date DESC"; 
+		} else {
+			$q = "SELECT CustID, COUNT(ProdID) AS ProdID, AddID, Quantity, datepd, StatusUpdate, Order_Date
+			FROM cust_order
+			WHERE NOT AddID = 0 AND StatusUpdate = '$S' AND datepd = '$sd'
+			GROUP BY CustID, Order_Date
+			ORDER BY Order_Date DESC";
+		};
 	}
-
 ?>
 
 
@@ -79,11 +145,12 @@ $sd=0;
 	<input type="submit" name="submit" value="Apply Filter"/>
 	</form>
 	</div>
-	<table border="1">
+	<table border="1" style="width: max-content; margin:0.5em 4em">
 		<tr>
 			<th>Date Ordered</th>
 			<th>Customer's Name</th>
 			<th>Delivery Method</th>
+			<th>Due Date</th>
 			<th>Current Status</th>
 			<th>View Order Details</th>
 		</tr>
@@ -116,13 +183,15 @@ $sd=0;
 				$DeliMeth = 'Delivery to Customer\'s Address';
 			}
 
-			echo "<tr><td>" . date("H:i:sA", strtotime($data['Order_Date'])) . "<br>
-			" . date("j M Y", strtotime($data['Order_Date'])) . "</td>";
+			echo "<tr><td>" . date("j M Y", strtotime($data['Order_Date'])) . "<br>
+			" . date("h:i:sA", strtotime($data['Order_Date'])) . "</td>";
+			// 12-hours format - h, 24-hours format - H
 			// j M Y - short form for month | j F Y - full name for month
 			// H:i:s A, j M Y - time, date | j M Y, H:i:s A - date, time
 			echo '
 				<td align="left">'.$dataC['CustName'].'</td>
-				<td align="left">'.$DeliMeth.'</td>';
+				<td align="left">'.$DeliMeth.'</td>
+				<td align="left">'.date('j M Y', strtotime($data['datepd'])).'</td>';
 			// if(mysqli_num_rows($rP) == 1) {
 			if (isset($data['StatusUpdate'])) {
 				echo '
@@ -189,10 +258,12 @@ $sd=0;
 
 		if ($r) {
 			echo '<select name="sDate" form=filter>';
-			echo "<option value=\"0\">No Date Filter</option>\n";
+			echo "<option value=\"2\">No Date Filter</option>\n";
 				foreach ($r as $value) {
 					echo "<option value=\"$value[datepd]\"";
-					if ($sd ==  $value['datepd']) {echo " selected";}	echo ">$value[datepd]</option>\n";
+					if ($sd ==  $value['datepd']) {echo " selected";} echo '>';	
+					echo date('j M Y', strtotime($value['datepd']));
+					echo "</option>\n";
 				}
 			echo '</select>';
 		} else {
