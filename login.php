@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 
 		// Query for user
-		$q1 = "SELECT * FROM customer WHERE Email='$em' AND password=SHA1('$p')";
+		$q1 = "SELECT * FROM customer WHERE Email='$em' AND password='$p'";
 		$r1 = @mysqli_query ($dbc, $q1); // Run the query.
 
 		// Check the result:

@@ -162,7 +162,7 @@ if (empty($_SESSION['AdminID'])) {
 		// }
 
 		if (!mysqli_num_rows($r) == 1) {
-			echo '<tr><td colspan="5">No order from customer</td></tr>';
+			echo '<tr><td colspan="6">No order from customer</td></tr>';
 		} else {
 		while ($data = mysqli_fetch_array($r)) {
 

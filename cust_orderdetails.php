@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		<?php } ?>
 		
 		<tr><th style="text-align:right">Selected Pickup / Delivery Date:- </th><td colspan="2" style="text-align:left"><b><?php echo date("j M Y", strtotime($datepd)) ?></b></td></tr>
-		<form action="orderLdetails.php" id=statupd method="POST">
+		<form action="cust_orderdetails.php" id=statupd method="POST">
 			<?php 
 			if ($SU == 'Order Ready for Pickup/Delivery') {
 				echo '<label>' .StatusUpdate($SU).'</label>';
