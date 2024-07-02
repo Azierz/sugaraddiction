@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		} else { // Register the user in the database...
 
 		// Make the query:
-		$q = "INSERT INTO customer VALUES (0, '$n', SHA1('$p'), '$pn', '$dob', '', '$e', NOW(), '')";
+		$q = "INSERT INTO customer VALUES (0, '$n', '$p', '$pn', '$dob', '', '$e', NOW(), '')";
 		$r = mysqli_query ($dbc, $q); // Run the query.
 		
 		// Take Cust ID to insert in Address & Save Address in different table
