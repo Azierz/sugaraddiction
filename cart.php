@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					echo '
 					<div class="btn-group">
 						<button><a href="edit_productCart.php?id='.$data['ProductID'].'">EDIT</a></button><br><br>
-						<button><a href="delete_product.php?id='.$data['ProductID'].'">DELETE</a></button>
+						<button><a href="delete_productCart.php?id='.$data['ProductID'].'">DELETE</a></button>
 					</div>';
 					
 					

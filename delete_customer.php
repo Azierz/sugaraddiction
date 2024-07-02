@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <div class="menudetails">
 	<div class="row">
 	  	<div class="column">
-		<table>
+		<table style="width: auto;">
 			<?php
 			require ('includes/constants.php');
 
@@ -61,24 +61,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			while ($data = mysqli_fetch_array($r)) {
 				echo '
 				<tr>
-					<td><b>Customer ID</b></td>
-					<td>'.$data["CustID"].'</td>
-					</tr>
-					<tr>
-					<td><b>Customer Name</b></td>
+					<th>Customer Name</th>
 					<td>'.$data["CustName"].'</td>
 					</tr>
 					<tr>
-					<td><b>Customer Phone</b></td>
+					<th>Customer Phone</th>
 					<td>'.$data["PhoneNum"].'</td>
 					</tr>
 					<tr>
-					<td><b>Customer Email</b></td>
+					<th>Customer Email</th>
 					<td>'.$data["Email"].'</td>
 					</tr>
 					<tr>
-					<td><b>Customer Date</b></td>
-					<td>'.$data["dateofbirth"].'</td>
+					<th>Customer Date</th>';
+					if (empty($data['dateofbirth'])) {
+					
+						echo '<td> No Record</td>';
+					} else {
+						echo '<td>'.date("j M Y",strtotime($data['dateofbirth'])).'</td>';
+						}
+					echo '
 					</tr>
 					
 						<tr>
@@ -93,7 +95,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 							</td>
 						</tr>
 					</table>
-					</div>';
+					</div>
+
+					<div class="column">
+					<table style="width: max-content;">
+					<tr>
+					<th colspan=2>Customer\'s Addresses</th>
+					</tr>';
+
+			$q = "SELECT * FROM address WHERE Cust_ID = '$CustID' ORDER BY Address_ID ASC";
+			$r = @mysqli_query ($dbc,$q);
+			$no = 1;
+			if (!mysqli_num_rows($r) == 1) {
+				echo '<tr><td colspan="4">No registered address</td></tr>';
+			} else {
+			while ($dataA = mysqli_fetch_array($r)) {
+				echo '
+				<tr>
+				<th>'.$no.'</th>
+				<td>'.$dataA["Address"].'</td>
+				</tr>';
+				$no++;
+			}}
+
+			echo '					
+			</table>
+			</div>';
+
+
+
 			}}
 			?>
 	</div>

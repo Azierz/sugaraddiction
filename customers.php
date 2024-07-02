@@ -18,7 +18,7 @@ if (empty($_SESSION['AdminID'])) {
 <div class="btn-group" style="float: right; margin:-4.1em 0.5em">
 		<button><a href="register.php">Add New Customer</a></button>
 	</div>
-	<table border="1" style="width: max-content; margin:0.5em 8em">
+	<table border="1" style="width: auto; margin: 1%;">
 		<tr>
 			<th>Name</th>
 			<th>Email Address</th>
@@ -58,7 +58,7 @@ if (empty($_SESSION['AdminID'])) {
 				</form>';
 				echo "</td><td align='left'>" . date("H:i:s A", strtotime($data['regs_date'])) . "<br>" . date("j M Y", strtotime($data['regs_date'])) . "</td>";
 				echo '<td align="left">
-				<form action="edit_customer.php" method="GET">
+				<form action="edit_customers.php" method="GET">
 				<input type="text" name="CustID" value="'.$data["CustID"].'" hidden>
 				<input type="text" name="CustName" value="'.$data["CustName"].'" hidden>
 				<input type="submit" name="submit" value="Edit" />

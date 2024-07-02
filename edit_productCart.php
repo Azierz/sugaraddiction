@@ -1,60 +1,69 @@
 <?php
-$page_title = 'Cart Product Edit';
-$page_text = 'Cart Product Edit';
+$page_title = 'Cart - Edit Product';
+$page_text = 'Cart - Edit Product';
 include ('includes/header.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-	$eID = $_POST['edit'];
-	$eName = $_POST['name'];
-	$ePrice = $_POST['price'];
-	$eDesc = $_POST['desc'];
+if (empty($_SESSION['CustID'])) {
+	echo '
+		<script>
+		window.alert("\nPLEASE LOGIN FIRST!");
+		setTimeout(function(){location.href="login.php"},0);
+		</script>';
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+	
+	$CartID = $_POST['cart'];
+	$CartQty = $_POST['qty'];
+	$CartSms = $_POST['sms'];
 
 	require ('includes/constants.php');
 
-	$q = "UPDATE product SET Name='$eName', Price='$ePrice', Description='$eDesc' WHERE ProductID=$eID LIMIT 1";
-	$r = @mysqli_query ($dbc, $q);
+	$q = "SELECT * FROM product WHERE ProductID='$CartID'";
+	$r = @mysqli_query ($dbc,$q);
 
-	if (mysqli_affected_rows($dbc) == 1) {
+	if (!mysqli_num_rows($r) == 1) {
 		echo '<script>
-		window.alert("\nSUCCESS!\nProduct has been updated.");
-		setTimeout(function(){location.href="maintenance.php"},0);
+		window.alert("\nERROR!\nPlease try again later.");
+		setTimeout(function(){location.href="menu.php"},0);
 		</script>';
 	} else {
+		
+		
+			$i = $_POST["cart"];
+			$qty = $CartQty;
+			$_SESSION["amounts"][$i] = $amounts[$i] * $qty;
+			$_SESSION["cart"][$i] = $i;
+			$_SESSION["qty"][$i] = $qty;
+
+			if (!empty($CartSms)) {
+				$_SESSION["sms"][$i] = $CartSms;
+			} else {
+				$_SESSION["sms"][$i] = null;
+			}
+	
+
 		echo '<script>
-		window.alert("\ERROR!\nProduct cannot not be updated.\nPlease try again later.");
-		setTimeout(function(){location.href="maintenance.php"},0);
+		window.alert("\nSUCCESS!\nCart product has been edited.");
+		setTimeout(function(){location.href="cart.php"},0);
 		</script>';
 	}
 }
-
 ?>
 
-<h1>Product Edit</h1>
+<h1>Sugar Addiction Menu Details</h1>
 
 <div class="menudetails">
 	<div class="row">
+
 	  	<div class="column">
 		<table>
 			<?php
 			require ('includes/constants.php');
 
 			$ProductID = $_GET["id"];
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+			$i = $_GET["id"];
 			
 			$q = "SELECT * FROM product WHERE ProductID='$ProductID'";
 			$r = @mysqli_query ($dbc,$q);
@@ -64,7 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			} else {
 			while ($data = mysqli_fetch_array($r)) {
 				echo '
-				<form action="edit_product.php" method="POST">
 				<tr>
 					<td>';
 					if (!isset($data["Image"])) {
@@ -74,32 +82,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					};
 					echo '</td>
 					<tr>
-						<td><div class="btn-group">
-							<button><a href="upload.php?id='.$data['ProductID'].'">Change Photo</a></button>
-						</div></td>
+						<td>'.$data["Description"].'</td>
 					</tr>
+					<form action="edit_productCart.php" method="POST">
 					
+
 					</table>
 					</div>
 					
 					<div class="column">
 					<table>
 						<tr>
-							<th colspan="2">Fruit Name:<input type="text" name="name" value="'.$data["Name"].'" required></th>
+							<th colspan="2">'.$data["Name"].'</th>
 						</tr>
 						<tr>
-							<th colspan="2">Price(RM): <input type="text" name="price" value="'.$data["Price"].'" size="5" required></th>
-						</tr>
+							<td colspan="2">Price: RM '.$data["Price"].'</td>
+						</tr>';
+						// if productid = 4, set minimum quantity at least 20
+						if ($data["ProductID"] == 4) {
+							echo '<tr>
+							<td colspan="2">Minimum: 20 pcs (RM70)<br>Quantity:<br><br><input type="number" name="qty" size=5 value="20" min=20 max=999></td>
+							</tr>';
+						} else {
+							echo '<tr>
+							<td colspan="2">Quantity:<br><br><input type="number" name="qty" size=5 value="'.$_SESSION["qty"][$i].'" min=1 max=999></td>
+							</tr>';
+						}
+						// if ProductID = 1 or 4 or 12 or 13 or 13
+						if ($data["ProductID"] == 1 || $data["ProductID"] == 12 || 
+						$data["ProductID"] == 13 || $data["ProductID"] == 14) {
+							echo '
+							<tr>
+								<td colspan="2">Personalized Message (Optional):<br><br><textarea name="sms" rows="4" cols="30">'.$_SESSION["sms"][$i].'</textarea></td>
+							</tr>';
+						}
+							
+						echo'
 						<tr>
-							<th colspan="2">FRUIT DESCRIPTION: <br><input type="text" name="desc" value="'.$data["Description"].'" required></th>
-						</tr>
-						<tr>
-						<td colspan="2">
-							<input type="text" name="edit" value="'.$data["ProductID"].'" hidden>
-							<input type="submit" name="submit" value="Confirm Changes" />
-						</td>
+							<input type="text" name="cart" value="'.$data["ProductID"].'" hidden>
+							<td colspan="2"><input type="submit" name="submit" value="Add To Cart" /></td>
 						</tr>
 						</form>
+						
 					</table>
 					</div>';
 			}}

@@ -183,12 +183,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 					';
 				}}
 		}}
-		if ($TotalPayment < 100) {
+		if ($TotalPayment < 100 && $_SESSION['newaddress'] != 'COD') {
 			$TotalPayment += 5; //Adding shipping fee to total payment
 		echo '<p>Delivery Charge <span class="price">RM5.00</span></p>';
 			
+		} else if ($TotalPayment > 100 && $_SESSION['newaddress'] != 'COD') {
+			echo '<p>Delivery Charge <span class="price">Free Delivery</span></p>';
 		} else {
-			echo '<p>Delivery Charge <span class="price">Free</span></p>';
+			echo '<p>Delivery Charge <span class="price">N/A for self pickup</span></p>';
 		}
 		echo'
 		<hr><p>Total <span class="price" style="color:black"><b>RM'.$TotalPayment.'</b></span></p>';

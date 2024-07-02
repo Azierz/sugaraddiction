@@ -145,7 +145,7 @@ if (empty($_SESSION['AdminID'])) {
 	<input type="submit" name="submit" value="Apply Filter"/>
 	</form>
 	</div>
-	<table border="1" style="width: max-content; margin:0.5em 4em">
+	<table border="1" style="width: auto; margin: 1%;">
 		<tr>
 			<th>Date Ordered</th>
 			<th>Customer's Name</th>
