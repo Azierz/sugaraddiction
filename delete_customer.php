@@ -8,10 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if($_POST['con_del'] == "yes") {
 
 		$DelID = $_POST['delete'];
+		$setdel = 1;
 
 		require ('includes/constants.php');
-
-		$q = "DELETE FROM customer WHERE CustID='$DelID' LIMIT 1";
+		$q = "UPDATE customer SET CustDel='$setdel' WHERE CustID='$DelID' LIMIT 1";
 		$r = @mysqli_query ($dbc,$q);
 
 		if (mysqli_affected_rows($dbc) == 1) {

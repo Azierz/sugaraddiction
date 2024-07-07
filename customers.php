@@ -31,7 +31,7 @@ if (empty($_SESSION['AdminID'])) {
 		<?php
 		require ('includes/constants.php');
 
-		$q = "SELECT * FROM customer ORDER BY regs_date DESC";
+		$q = "SELECT * FROM customer WHERE CustDel=0 ORDER BY regs_date DESC";
 		$r = @mysqli_query ($dbc,$q);
 
 		if (!mysqli_num_rows($r) == 1) {

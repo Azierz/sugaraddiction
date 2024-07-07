@@ -107,6 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					echo '<th style="text-align:right">Current Order Status:-</th>
 					<td colspan=2 style="text-align:left">'.$SU.'</td>';
 				}?>
+				<tr><th style="text-align:right">Remark(s) for this order:- </th><td colspan="2" style="text-align:left">
+				<?php if(!empty($dataPre['remarks'])) { echo $dataPre['remarks'];}else{echo 'None';}?>
+			</tr>
 	</table>
 
 	<table border="1">

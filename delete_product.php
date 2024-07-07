@@ -8,10 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if($_POST['con_del'] == "yes") {
 
 		$DelID = $_POST['delete'];
+		$setdel = 1;
 
 		require ('includes/constants.php');
 
-		$q = "DELETE FROM product WHERE ProductID='$DelID' LIMIT 1";
+		$q = "UPDATE product SET ProdDel='$setdel' WHERE ProductID='$DelID' LIMIT 1";
 		$r = @mysqli_query ($dbc,$q);
 
 		if (mysqli_affected_rows($dbc) == 1) {
@@ -47,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			require ('includes/constants.php');
 
 			$ProductID = $_GET["id"];
-			
+
 			$q = "SELECT * FROM product WHERE ProductID='$ProductID'";
 			$r = @mysqli_query ($dbc,$q);
 			

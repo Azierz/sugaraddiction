@@ -70,13 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					<div class="column">
 					<table>
 						<tr>
-							<th colspan="2">Fruit Name:<input type="text" name="name" value="'.$data["Name"].'" required></th>
+							<th colspan="2">Dessert Name:<input type="text" name="name" value="'.$data["Name"].'" required></th>
 						</tr>
 						<tr>
 							<th colspan="2">Price(RM): <input type="text" name="price" value="'.$data["Price"].'" size="5" required></th>
 						</tr>
 						<tr>
-							<th colspan="2">FRUIT DESCRIPTION: <br><input type="text" name="desc" value="'.$data["Description"].'" required></th>
+							<th colspan="2">Dessert Description: <br><input type="text" name="desc" value="'.$data["Description"].'" required></th>
 						</tr>
 						<tr>
 						<td colspan="2">

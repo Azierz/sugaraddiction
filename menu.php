@@ -22,7 +22,7 @@ include ('includes/header2.php');
 			$search = "";
 		}
 
-		$q = "SELECT * FROM product WHERE Name LIKE '%$search%' ORDER BY Name ASC";
+		$q = "SELECT * FROM product WHERE Name LIKE '%$search%' AND ProdDel=0 ORDER BY Name ASC";
 		$r = @mysqli_query ($dbc,$q);
 
 		if (!mysqli_num_rows($r) == 1) {

@@ -111,11 +111,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 					<td colspan="1">&nbsp;</td>
 				</tr>
 				<tr>
-					<td rowspan="7" style="text-align: center;"><img src="includes/images/bank_account.jpg" width="270"></td>
+					<td rowspan="7" style="text-align: center;"><img src="includes/images/bank.jpg" width="270"></td>
 				</tr>
 				<tr>
 					<td><b>Account Holder Name: </b></td></tr><tr>
-					<td>Muhammad Azizi bin Azni</td>
+					<td>Maryam binti Mohamad Zin</td>
 					<!-- <td><input type="text" name="accname" size="30" maxlength="50" placeholder="Name on Account" /></td> -->
 				</tr>
 				<tr>
